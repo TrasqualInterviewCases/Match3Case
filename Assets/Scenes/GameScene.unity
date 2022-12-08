@@ -361,6 +361,52 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1366539727
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1366539729}
+  - component: {fileID: 1366539728}
+  m_Layer: 0
+  m_Name: ObjectPoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1366539728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366539727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbabce4e07b5dd64c884b0f62d85a96e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabs:
+  - {fileID: 4403301369406246264, guid: 6892b1d93efd853439417a5183fb53d9, type: 3}
+--- !u!4 &1366539729
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366539727}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1898529535
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,11 +436,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9920af4ae06b3c847b3e983560606fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pieces:
-  - {fileID: 6954108299797447588, guid: 75423981dfee2a841b8b9acecc35307a, type: 3}
-  - {fileID: 6461626032646073918, guid: df0208759ce806a478276afbd044988f, type: 3}
-  - {fileID: 4403301369406246264, guid: 6892b1d93efd853439417a5183fb53d9, type: 3}
-  - {fileID: 3991648950913568977, guid: 715dbd371df4f2646a46cecde6424399, type: 3}
+  redSprite: {fileID: 21300000, guid: 2423f28dfa7850e42ad225d13493bd9d, type: 3}
+  greenSprite: {fileID: 21300000, guid: 0a3f94b0a2909f944a08fc0c8d776db6, type: 3}
+  blueSprite: {fileID: 21300000, guid: 0b05d09344bf86e488eb63693f41cbd0, type: 3}
+  yellowSprite: {fileID: 21300000, guid: 3be8ab08f35290942bf6dea6f016714b, type: 3}
 --- !u!4 &1898529537
 Transform:
   m_ObjectHideFlags: 0

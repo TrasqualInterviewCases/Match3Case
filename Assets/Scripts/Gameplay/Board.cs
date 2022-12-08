@@ -15,8 +15,9 @@ namespace Main.Gameplay
 
         Tile[,] tiles;
 
-        private void Awake()
+        private void Start()
         {
+            tiles = new Tile[rows, columns];
             boardFillHandler = GetComponent<BoardFillHandler>();
 
             InitializeBoard();
@@ -25,8 +26,6 @@ namespace Main.Gameplay
 
         private void InitializeBoard()
         {
-            tiles = new Tile[rows, columns];
-
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < columns; j++)

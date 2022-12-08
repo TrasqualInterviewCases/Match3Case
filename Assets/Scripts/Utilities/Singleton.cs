@@ -10,7 +10,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             Destroy(Instance);
         }
-
         Instance = this as T;
     }
 }

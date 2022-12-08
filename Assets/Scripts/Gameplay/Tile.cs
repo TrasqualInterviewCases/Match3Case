@@ -9,7 +9,7 @@ namespace Main.Gameplay
 
         Board _board;
 
-        PieceBase _piece;
+        public PieceBase Piece { get; private set; }
 
         public void Init(int x, int y, Board board)
         {
@@ -24,7 +24,7 @@ namespace Main.Gameplay
 
         public void SetPiece(PieceBase piece)
         {
-            _piece = piece;
+            Piece = piece;
         }
     }
 }
