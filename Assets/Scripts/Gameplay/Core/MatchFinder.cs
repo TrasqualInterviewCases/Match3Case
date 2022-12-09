@@ -6,10 +6,9 @@ namespace Main.Gameplay
 {
     public static class MatchFinder
     {
-        public static bool FindMatches(Tile tile, out List<Tile> tiles, int minMatches = 3)
+        public static bool FindMatches(Tile tile, out List<Tile> tiles, int minMatches = 2)
         {
             tiles = new();
-            tiles.Add(tile);
 
             if (FindHorizontalMatches(tile, out List<Tile> horizontalMatches, minMatches))
             {
@@ -26,16 +25,15 @@ namespace Main.Gameplay
             return false;
         }
 
-        private static bool FindHorizontalMatches(Tile tile, out List<Tile> tiles, int minMatches = 3)
+        private static bool FindHorizontalMatches(Tile tile, out List<Tile> tiles, int minMatches = 2)
         {
             tiles = new();
-            tiles.Add(tile);
 
-            if (FindMatchInDirection(tile, DirectionType.Left, out List<Tile> leftMatches, 2))
+            if (FindMatchInDirection(tile, DirectionType.Left, out List<Tile> leftMatches, 1))
             {
                 tiles = tiles.Union(leftMatches).ToList();
             }
-            if (FindMatchInDirection(tile, DirectionType.Right, out List<Tile> rightMatches, 2))
+            if (FindMatchInDirection(tile, DirectionType.Right, out List<Tile> rightMatches, 1))
             {
                 tiles = tiles.Union(rightMatches).ToList();
             }
@@ -47,16 +45,15 @@ namespace Main.Gameplay
             return false;
         }
 
-        private static bool FindVerticalMatches(Tile tile, out List<Tile> tiles, int minMatches = 3)
+        private static bool FindVerticalMatches(Tile tile, out List<Tile> tiles, int minMatches = 2)
         {
             tiles = new();
-            tiles.Add(tile);
 
-            if (FindMatchInDirection(tile, DirectionType.Up, out List<Tile> upMatches, 2))
+            if (FindMatchInDirection(tile, DirectionType.Up, out List<Tile> upMatches, 1))
             {
                 tiles = tiles.Union(upMatches).ToList();
             }
-            if (FindMatchInDirection(tile, DirectionType.Down, out List<Tile> downMatches, 2))
+            if (FindMatchInDirection(tile, DirectionType.Down, out List<Tile> downMatches, 1))
             {
                 tiles = tiles.Union(downMatches).ToList();
             }
@@ -68,10 +65,9 @@ namespace Main.Gameplay
             return false;
         }
 
-        public static bool FindMatchInDirection(Tile tile, DirectionType direction, out List<Tile> tiles, int minMatches = 3)
+        public static bool FindMatchInDirection(Tile tile, DirectionType direction, out List<Tile> tiles, int minMatches = 2)
         {
             tiles = new();
-            tiles.Add(tile);
 
             while (GetMatchingNeighbour(tile, direction, out Tile foundTile))
             {

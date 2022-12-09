@@ -79,14 +79,39 @@ namespace Main.Gameplay
                 SetPiece(neighbourPiece);
 
                 var neighbourMatchCheck = MatchFinder.FindMatches(neighbour, out List<Tile> neighbourMatches);
+                if (neighbourMatchCheck)
+                {
+                    neighbourMatches.Add(neighbour);
+                }
+                else
+                {
+                    neighbourMatches.Clear();
+                }
+
                 var currentMatchCheck = MatchFinder.FindMatches(this, out List<Tile> currentMatches);
+                if (currentMatchCheck)
+                {
+                    currentMatches.Add(this);
+                }
+                else
+                {
+                    currentMatches.Clear();
+                }
+
 
                 if (neighbourMatchCheck || currentMatchCheck)
                 {
                     var combinedMatches = neighbourMatches.Union(currentMatches).ToList();
-                    StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
 
                     //process matches;
+                    for (int i = 0; i < combinedMatches.Count; i++)
+                    {
+                        var piece = combinedMatches[i].Piece;
+                        //combinedMatches[i].Piece = null;
+                        ObjectPoolManager.Instance.ReleaseObject(piece);
+                    }
+                    //DO Falls and Fills And then Do StateChange
+                    StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
                 }
                 else
                 {
