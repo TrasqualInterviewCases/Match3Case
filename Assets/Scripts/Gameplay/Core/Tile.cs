@@ -84,6 +84,8 @@ namespace Main.Gameplay
                 if (neighbourMatchCheck || currentMatchCheck)
                 {
                     var combinedMatches = neighbourMatches.Union(currentMatches).ToList();
+                    StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
+
                     //process matches;
                 }
                 else
@@ -92,12 +94,10 @@ namespace Main.Gameplay
                     {
                         neighbour.SetPiece(neighbourPiece);
                         SetPiece(currentPiece);
+                        StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
+
                     });
                 }
-
-                StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
-
-                //Rewind yaparken state deðiþtiði için sýkýntý
             });
         }
     }
