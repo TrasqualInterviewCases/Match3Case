@@ -107,10 +107,8 @@ namespace Main.Gameplay
                     for (int i = 0; i < combinedMatches.Count; i++)
                     {
                         var piece = combinedMatches[i].Piece;
-                        Destroy(piece.gameObject);
                         combinedMatches[i].Piece = null;
-                        Debug.Log(combinedMatches[i]);
-                        //ObjectPoolManager.Instance.ReleaseObject(piece);
+                        ObjectPoolManager.Instance.ReleaseObject(piece);
                     }
                     //DO Falls and Fills And then Do StateChange
                     StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
