@@ -17,7 +17,6 @@ public class BoardFillHandler : MonoBehaviour
                     ObjectPoolManager.Instance.ReleaseObject(newPiece);
                     newPiece = PieceProvider.Instance.GetRandomPiece();
                 }
-                newPiece.SetOwnerTile(tiles[j, i]);
                 tiles[j, i].SetPiece(newPiece);
             }
         }

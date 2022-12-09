@@ -7,17 +7,17 @@ namespace Main.Gameplay
         [Header("Prefabs")]
         [SerializeField] Tile tilePrefab;
 
-        [Header("Board Dimensions")]
-        [SerializeField] int columns = 8;
-        [SerializeField] int rows = 8;
+        [field: Header("Board Dimensions")]
+        [field: SerializeField] public int Columns { get; private set; } = 8;
+        [field: SerializeField] public int Rows { get; private set; } = 8;
 
         BoardFillHandler boardFillHandler;
 
-        public Tile[,] Tiles;
+        public Tile[,] Tiles { get; private set; }
 
         private void Start()
         {
-            Tiles = new Tile[rows, columns];
+            Tiles = new Tile[Rows, Columns];
             boardFillHandler = GetComponent<BoardFillHandler>();
 
             InitializeBoard();
@@ -26,13 +26,22 @@ namespace Main.Gameplay
 
         private void InitializeBoard()
         {
-            for (int j = 0; j < columns; j++)
+            for (int j = 0; j < Columns; j++)
             {
-                for (int i = 0; i < rows; i++)
+                for (int i = 0; i < Rows; i++)
                 {
                     Tiles[i, j] = Instantiate(tilePrefab, transform);
                     Tiles[i, j].Init(i, j, this);
                 }
+            }
+            SetupTileNeighbours();
+        }
+
+        private void SetupTileNeighbours()
+        {
+            foreach (var tile in Tiles)
+            {
+                tile.SetupNeighbours();
             }
         }
     }

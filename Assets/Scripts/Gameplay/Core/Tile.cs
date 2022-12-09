@@ -15,6 +15,12 @@ namespace Main.Gameplay
 
         Dictionary<DirectionType, Tile> neighbours = new Dictionary<DirectionType, Tile>();
 
+        [Header("Debug Neighbours")]
+        [SerializeField] Tile neighbourUp;
+        [SerializeField] Tile neighbourDown;
+        [SerializeField] Tile neighbourLeft;
+        [SerializeField] Tile neighbourRight;
+
         public void Init(int x, int y, Board board)
         {
             X = x;
@@ -29,28 +35,35 @@ namespace Main.Gameplay
         public void SetPiece(PieceBase piece)
         {
             Piece = piece;
+            Piece.SetOwnerTile(this);
         }
 
-        private void SetupNeighbours()
+        public void SetupNeighbours()
         {
             neighbours.Clear();
 
-            if (X > 0)
-                neighbours[DirectionType.Left] = _board.Tiles[X + 1, Y];
+            if (X >= 0 && X < _board.Columns - 1)
+                neighbourRight = neighbours[DirectionType.Right] = _board.Tiles[X + 1, Y];
 
-            if (X <= _board.Tiles.GetLength(0) - 1)
-                neighbours[DirectionType.Right] = _board.Tiles[X - 1, Y];
+            if (X > 0 && X <= _board.Columns - 1)
+                neighbourLeft = neighbours[DirectionType.Left] = _board.Tiles[X - 1, Y];
 
-            if (Y > 0)
-                neighbours[DirectionType.Up] = _board.Tiles[X, Y + 1];
+            if (Y >= 0 && Y < _board.Rows - 1)
+                neighbourUp = neighbours[DirectionType.Up] = _board.Tiles[X, Y + 1];
 
-            if (Y <= _board.Tiles.GetLength(1) - 1)
-                neighbours[DirectionType.Down] = _board.Tiles[X, Y - 1];
+            if (Y > 0 && Y <= _board.Rows - 1)
+                neighbourDown = neighbours[DirectionType.Down] = _board.Tiles[X, Y - 1];
         }
 
         public void RecieveInputDirection(DirectionType direction)
         {
+            if (!neighbours.ContainsKey(direction)) return;
 
+            //TODO Check Matches at Neighbours Position and This Tile Position of swapped PieceTypes
+            var neighbour = neighbours[direction];
+            var neighbourPiece = neighbour.Piece;
+            neighbours[direction].SetPiece(Piece);
+            SetPiece(neighbourPiece);
         }
     }
 }

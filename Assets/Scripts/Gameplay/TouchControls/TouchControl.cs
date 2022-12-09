@@ -1,9 +1,13 @@
+using Main.Gameplay.StateMachineSystem;
+using System;
 using UnityEngine;
 
 namespace Main.Gameplay.TouchControls
 {
     public class TouchControl : MonoBehaviour
     {
+        public event Action OnSwipeInputRecieved;
+
         [SerializeField] float minSwipeDistance = 10;
 
         Camera cam;
@@ -39,40 +43,44 @@ namespace Main.Gameplay.TouchControls
                 if (_selectedTile == null) return;
 
                 endPos = Input.mousePosition;
-                _selectedTile.RecieveInputDirection(CalculateSwipeDirection());
-            }
-
-            if (Input.GetMouseButtonUp(0))
-            {
-                _selectedTile = null;
+                if (CalculateSwipeDirection(out DirectionType direction))
+                {
+                    _selectedTile.RecieveInputDirection(direction);
+                    _selectedTile = null;
+                    OnSwipeInputRecieved?.Invoke();
+                }
             }
         }
 
-        private DirectionType CalculateSwipeDirection()
+        private bool CalculateSwipeDirection(out DirectionType direction)
         {
+            direction = DirectionType.None;
             var directionVector = endPos - startPos;
 
-            if (directionVector.magnitude < minSwipeDistance) return DirectionType.None;
+            if (directionVector.magnitude < minSwipeDistance)
+            {
+                direction = DirectionType.None;
+                return false;
+            }
 
             var directionAngle = Mathf.Atan2(directionVector.y, directionVector.x) * Mathf.Rad2Deg;
-            Debug.Log(directionAngle);
             if (directionAngle >= -45 && directionAngle <= 45)
             {
-                return DirectionType.Right;
+                direction = DirectionType.Right;
             }
             else if (directionAngle > 45 && directionAngle < 135)
             {
-                return DirectionType.Up;
+                direction = DirectionType.Up;
             }
             else if (directionAngle >= 135 || directionAngle <= -135)
             {
-                return DirectionType.Left;
+                direction = DirectionType.Left;
             }
             else if (directionAngle > -135 && directionAngle < -45)
             {
-                return DirectionType.Down;
+                direction = DirectionType.Down;
             }
-            return DirectionType.None;
+            return true;
         }
     }
 }
