@@ -22,8 +22,6 @@ namespace Main.Gameplay.StateMachineSystem
             AnimationState = new AnimationState(this);
 
             currentState = TouchState;
-
-            Input.OnSwipeInputRecieved += CompleteTouchState;
         }
 
         public void ChangeState(StateBase nextState)
@@ -33,16 +31,6 @@ namespace Main.Gameplay.StateMachineSystem
             currentState = nextState;
             currentState.EnterState();
             OnStateChanged?.Invoke(currentState);
-        }
-
-        private void CompleteTouchState()
-        {
-            ChangeState(AnimationState);
-        }
-
-        private void OnDisable()
-        {
-            Input.OnSwipeInputRecieved -= CompleteTouchState;
         }
     }
 }

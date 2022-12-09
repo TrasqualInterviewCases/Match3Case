@@ -14,9 +14,13 @@ namespace Main.Gameplay.Piece
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         }
 
+        public void SetPosition(Vector3 position)
+        {
+            transform.position = position;
+        }
+
         public void SetOwnerTile(Tile tile)
         {
-            transform.position = tile.transform.position;
             gameObject.name = GetType().Name + $"({tile.X}, {tile.Y})";
         }
 

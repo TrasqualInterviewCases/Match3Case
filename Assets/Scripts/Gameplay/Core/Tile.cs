@@ -1,6 +1,8 @@
 using Main.Gameplay.Enums;
 using Main.Gameplay.Piece;
+using Main.Gameplay.StateMachineSystem;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Main.Gameplay
@@ -58,13 +60,45 @@ namespace Main.Gameplay
 
         public void RecieveInputDirection(DirectionType direction)
         {
-            if (!Neighbours.ContainsKey(direction)) return;
+            if (!Neighbours.ContainsKey(direction))
+            {
+                //Do Shake Animation
+                return;
+            }
 
-            //TODO Check Matches at Neighbours Position and This Tile Position of swapped PieceTypes
+            var pieceSwapper = ObjectPoolManager.Instance.GetObject<SwapPieceCommand>();
+
             var neighbour = Neighbours[direction];
+
             var neighbourPiece = neighbour.Piece;
-            Neighbours[direction].SetPiece(Piece);
-            SetPiece(neighbourPiece);
+            var currentPiece = Piece;
+
+            pieceSwapper.Init(currentPiece, neighbourPiece, 5f, () =>
+            {
+                neighbour.SetPiece(currentPiece);
+                SetPiece(neighbourPiece);
+
+                var neighbourMatchCheck = MatchFinder.FindMatches(neighbour, out List<Tile> neighbourMatches);
+                var currentMatchCheck = MatchFinder.FindMatches(this, out List<Tile> currentMatches);
+
+                if (neighbourMatchCheck || currentMatchCheck)
+                {
+                    var combinedMatches = neighbourMatches.Union(currentMatches).ToList();
+                    //process matches;
+                }
+                else
+                {
+                    pieceSwapper.Rewind(() =>
+                    {
+                        neighbour.SetPiece(neighbourPiece);
+                        SetPiece(currentPiece);
+                    });
+                }
+
+                StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
+
+                //Rewind yaparken state deðiþtiði için sýkýntý
+            });
         }
     }
 }

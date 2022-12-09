@@ -1,13 +1,13 @@
 using Main.Gameplay.Enums;
+using Main.Gameplay.StateMachineSystem;
 using System;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Main.Gameplay.TouchControls
 {
     public class TouchControl : MonoBehaviour
     {
-        public event Action OnSwipeInputRecieved;
-
         [SerializeField] float minSwipeDistance = 10;
 
         Camera cam;
@@ -17,6 +17,8 @@ namespace Main.Gameplay.TouchControls
 
         Tile _selectedTile;
 
+        bool isInputEnabled = true;
+
         private void Awake()
         {
             cam = Camera.main;
@@ -24,6 +26,8 @@ namespace Main.Gameplay.TouchControls
 
         private void Update()
         {
+            if (!isInputEnabled) return;
+
             if (Input.GetMouseButtonDown(0))
             {
                 var ray = cam.ScreenPointToRay(Input.mousePosition);
@@ -47,7 +51,7 @@ namespace Main.Gameplay.TouchControls
                 {
                     _selectedTile.RecieveInputDirection(direction);
                     _selectedTile = null;
-                    OnSwipeInputRecieved?.Invoke();
+                    StateMachine.Instance.ChangeState(StateMachine.Instance.AnimationState);
                 }
             }
         }
@@ -81,6 +85,28 @@ namespace Main.Gameplay.TouchControls
                 direction = DirectionType.Down;
             }
             return true;
+        }
+
+        private void ToggleInput(StateBase activeState)
+        {
+            if(activeState is TouchState)
+            {
+                isInputEnabled = true;
+            }
+            else
+            {
+                isInputEnabled = false;
+            }
+        }
+
+        private void OnEnable()
+        {
+            StateMachine.OnStateChanged += ToggleInput;
+        }
+
+        private void OnDisable()
+        {
+            StateMachine.OnStateChanged -= ToggleInput;
         }
     }
 }

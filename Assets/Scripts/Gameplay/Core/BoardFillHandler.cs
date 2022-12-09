@@ -12,12 +12,14 @@ public class BoardFillHandler : MonoBehaviour
             {
                 var newPiece = PieceProvider.Instance.GetRandomPiece();
                 tiles[j, i].SetPiece(newPiece);
+                newPiece.SetPosition(tiles[j, i].transform.position);
 
                 while (CheckInitialMatch(tiles[j, i]))
                 {
                     ObjectPoolManager.Instance.ReleaseObject(newPiece);
                     newPiece = PieceProvider.Instance.GetRandomPiece();
                     tiles[j, i].SetPiece(newPiece);
+                    newPiece.SetPosition(tiles[j, i].transform.position);
                 }
             }
         }
