@@ -49,9 +49,9 @@ namespace Main.Gameplay.TouchControls
                 endPos = Input.mousePosition;
                 if (CalculateSwipeDirection(out DirectionType direction))
                 {
+                    StateMachine.Instance.ChangeState(StateMachine.Instance.AnimationState);
                     _selectedTile.RecieveInputDirection(direction);
                     _selectedTile = null;
-                    StateMachine.Instance.ChangeState(StateMachine.Instance.AnimationState);
                 }
             }
         }
@@ -89,7 +89,7 @@ namespace Main.Gameplay.TouchControls
 
         private void ToggleInput(StateBase activeState)
         {
-            if(activeState is TouchState)
+            if (activeState is TouchState)
             {
                 isInputEnabled = true;
             }

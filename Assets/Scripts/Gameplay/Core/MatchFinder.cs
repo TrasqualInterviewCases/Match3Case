@@ -1,6 +1,8 @@
 using Main.Gameplay.Enums;
 using System.Collections.Generic;
+using UnityEngine;
 using System.Linq;
+using System;
 
 namespace Main.Gameplay
 {
@@ -100,7 +102,7 @@ namespace Main.Gameplay
         {
             if (tile.Neighbours.ContainsKey(direction))
             {
-                if (tile.Neighbours[direction].Piece.PieceType == tile.Piece.PieceType)
+                if (tile.Neighbours[direction].Piece != null && tile.Neighbours[direction].Piece.PieceType == tile.Piece.PieceType)
                 {
                     matchingTile = tile.Neighbours[direction];
                     return true;

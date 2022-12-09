@@ -60,19 +60,19 @@ namespace Main.Gameplay
 
         public void RecieveInputDirection(DirectionType direction)
         {
-            if (!Neighbours.ContainsKey(direction))
+            if (!Neighbours.ContainsKey(direction) || Neighbours[direction].Piece == null || Piece == null)
             {
                 //Do Shake Animation
+                StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
                 return;
             }
-
-            var pieceSwapper = ObjectPoolManager.Instance.GetObject<SwapPieceCommand>();
 
             var neighbour = Neighbours[direction];
 
             var neighbourPiece = neighbour.Piece;
             var currentPiece = Piece;
 
+            var pieceSwapper = ObjectPoolManager.Instance.GetObject<SwapPieceCommand>();
             pieceSwapper.Init(currentPiece, neighbourPiece, 5f, () =>
             {
                 neighbour.SetPiece(currentPiece);
@@ -107,8 +107,10 @@ namespace Main.Gameplay
                     for (int i = 0; i < combinedMatches.Count; i++)
                     {
                         var piece = combinedMatches[i].Piece;
-                        //combinedMatches[i].Piece = null;
-                        ObjectPoolManager.Instance.ReleaseObject(piece);
+                        Destroy(piece.gameObject);
+                        combinedMatches[i].Piece = null;
+                        Debug.Log(combinedMatches[i]);
+                        //ObjectPoolManager.Instance.ReleaseObject(piece);
                     }
                     //DO Falls and Fills And then Do StateChange
                     StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
