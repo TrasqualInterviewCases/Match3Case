@@ -13,25 +13,25 @@ namespace Main.Gameplay
 
         BoardFillHandler boardFillHandler;
 
-        Tile[,] tiles;
+        public Tile[,] Tiles;
 
         private void Start()
         {
-            tiles = new Tile[rows, columns];
+            Tiles = new Tile[rows, columns];
             boardFillHandler = GetComponent<BoardFillHandler>();
 
             InitializeBoard();
-            boardFillHandler.DoInitialFill(tiles);
+            boardFillHandler.DoInitialFill(Tiles);
         }
 
         private void InitializeBoard()
         {
-            for (int i = 0; i < rows; i++)
+            for (int j = 0; j < columns; j++)
             {
-                for (int j = 0; j < columns; j++)
+                for (int i = 0; i < rows; i++)
                 {
-                    tiles[i, j] = Instantiate(tilePrefab, transform);
-                    tiles[i, j].Init(i, j, this);
+                    Tiles[i, j] = Instantiate(tilePrefab, transform);
+                    Tiles[i, j].Init(i, j, this);
                 }
             }
         }

@@ -1,3 +1,4 @@
+using Main.Gameplay.Piece;
 using UnityEngine;
 
 public class PieceProvider : Singleton<PieceProvider>

@@ -1,24 +1,28 @@
 using UnityEngine;
 
-public class PieceBase : MonoBehaviour
+namespace Main.Gameplay.Piece
 {
-    [field: SerializeField] public PieceType PieceType { get; private set; }
-
-    SpriteRenderer spriteRenderer;
-
-    private void Awake()
+    public class PieceBase : MonoBehaviour
     {
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-    }
+        [field: SerializeField] public PieceType PieceType { get; private set; }
 
-    public void SetPosition(Vector3 tilePos)
-    {
-        transform.position = tilePos;
-    }
+        SpriteRenderer spriteRenderer;
 
-    public void Init(PieceType pieceType, Sprite pieceSprite)
-    {
-        spriteRenderer.sprite = pieceSprite;
-        PieceType = pieceType;
+        private void Awake()
+        {
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        }
+
+        public void SetOwnerTile(Tile tile)
+        {
+            transform.position = tile.transform.position;
+            gameObject.name = GetType().Name + $"({tile.X}, {tile.Y})";
+        }
+
+        public void Init(PieceType pieceType, Sprite pieceSprite)
+        {
+            spriteRenderer.sprite = pieceSprite;
+            PieceType = pieceType;
+        }
     }
 }

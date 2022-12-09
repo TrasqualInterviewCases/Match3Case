@@ -1,23 +1,24 @@
 using Main.Gameplay;
+using Main.Gameplay.Piece;
 using UnityEngine;
 
 public class BoardFillHandler : MonoBehaviour
 {
     public void DoInitialFill(Tile[,] tiles)
     {
-        for (int i = 0; i < tiles.GetLength(0); i++)
+        for (int i = 0; i < tiles.GetLength(1); i++)
         {
-            for (int j = 0; j < tiles.GetLength(1); j++)
+            for (int j = 0; j < tiles.GetLength(0); j++)
             {
                 var newPiece = PieceProvider.Instance.GetRandomPiece();
 
-                while (CheckInitialMatch(newPiece, i, j, tiles))
+                while (CheckInitialMatch(newPiece, j, i, tiles))
                 {
                     ObjectPoolManager.Instance.ReleaseObject(newPiece);
                     newPiece = PieceProvider.Instance.GetRandomPiece();
                 }
-                newPiece.SetPosition(tiles[i, j].transform.position);
-                tiles[i, j].SetPiece(newPiece);
+                newPiece.SetOwnerTile(tiles[j, i]);
+                tiles[j, i].SetPiece(newPiece);
             }
         }
     }

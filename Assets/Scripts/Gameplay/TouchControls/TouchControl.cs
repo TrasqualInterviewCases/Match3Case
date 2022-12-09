@@ -39,7 +39,7 @@ namespace Main.Gameplay.TouchControls
                 if (_selectedTile == null) return;
 
                 endPos = Input.mousePosition;
-                Debug.Log(CalculateDirection());
+                _selectedTile.RecieveInputDirection(CalculateSwipeDirection());
             }
 
             if (Input.GetMouseButtonUp(0))
@@ -48,7 +48,7 @@ namespace Main.Gameplay.TouchControls
             }
         }
 
-        private DirectionType CalculateDirection()
+        private DirectionType CalculateSwipeDirection()
         {
             var directionVector = endPos - startPos;
 
