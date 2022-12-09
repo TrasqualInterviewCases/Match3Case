@@ -1,4 +1,4 @@
-namespace Main.Gameplay
+namespace Main.Gameplay.Enums
 {
     public enum DirectionType
     {

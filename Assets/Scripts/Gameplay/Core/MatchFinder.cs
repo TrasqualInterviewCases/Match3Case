@@ -1,21 +1,40 @@
-using System.Collections;
+using Main.Gameplay.Enums;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Main.Gameplay
 {
-    public class MatchFinder : MonoBehaviour
+    public static class MatchFinder
     {
-        // Start is called before the first frame update
-        void Start()
+        public static void FindMatches(Tile tile, PieceType pieceType, Board board)
         {
 
         }
 
-        // Update is called once per frame
-        void Update()
+        public static bool FindMatchInDirection(Tile tile, DirectionType direction, out List<Tile> tiles, int minMatches = 3)
         {
+            tiles = new();
 
+            while (GetMatchingNeighbour(tile, direction, out Tile foundTile))
+            {
+                tiles.Add(foundTile);
+                tile = foundTile;
+            }
+            if (tiles.Count >= minMatches)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private static bool GetMatchingNeighbour(Tile tile, DirectionType direction, out Tile matchingTile)
+        {
+            if (tile.Neighbours.ContainsKey(direction))
+            {
+                matchingTile = tile.Neighbours[direction];
+                return true;
+            }
+            matchingTile = null;
+            return false;
         }
     }
 }

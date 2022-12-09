@@ -1,8 +1,10 @@
-
-public enum PieceType
+namespace Main.Gameplay.Enums
 {
-    Red,
-    Green,
-    Blue,
-    Yellow,
+    public enum PieceType
+    {
+        Red,
+        Green,
+        Blue,
+        Yellow,
+    }
 }
