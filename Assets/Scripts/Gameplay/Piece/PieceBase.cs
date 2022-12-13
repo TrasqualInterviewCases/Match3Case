@@ -1,4 +1,5 @@
 using Main.Gameplay.Enums;
+using System.Collections;
 using UnityEngine;
 
 namespace Main.Gameplay.Piece
@@ -6,6 +7,7 @@ namespace Main.Gameplay.Piece
     public class PieceBase : MonoBehaviour
     {
         [field: SerializeField] public PieceType PieceType { get; private set; }
+        [SerializeField] float fallSpeed = 5f;
 
         SpriteRenderer spriteRenderer;
 
@@ -28,6 +30,22 @@ namespace Main.Gameplay.Piece
         {
             spriteRenderer.sprite = pieceSprite;
             PieceType = pieceType;
+        }
+
+        public void FallTo(Tile targetTile)
+        {
+            StartCoroutine(FallCo(targetTile));
+        }
+
+        private IEnumerator FallCo(Tile targetTile)
+        {
+            while (Vector3.Distance(transform.position, targetTile.transform.position) > 0.1f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetTile.transform.position, Time.deltaTime * fallSpeed);
+                yield return null;
+            }
+            transform.position = targetTile.transform.position;
+            targetTile.SetPiece(this);
         }
     }
 }

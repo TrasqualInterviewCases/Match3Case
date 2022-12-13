@@ -6,85 +6,88 @@ namespace Main.Gameplay
 {
     public static class MatchFinder
     {
-        public static bool FindMatches(Tile tile, out List<Tile> tiles, int minMatches = 2)
-        {
-            tiles = new();
+        private static List<Tile> processedTiles = new List<Tile>();
 
-            if (FindHorizontalMatches(tile, out List<Tile> horizontalMatches, minMatches))
+        private static int indexPointer;
+
+        private static void AddMember(Tile tile)
+        {
+            if (!processedTiles.Contains(tile))
             {
-                tiles = tiles.Union(horizontalMatches).ToList();
+                processedTiles.Add(tile);
+                indexPointer++;
             }
-            if (FindVerticalMatches(tile, out List<Tile> verticalMatches, minMatches))
-            {
-                tiles = tiles.Union(verticalMatches).ToList();
-            }
-            if (tiles.Count >= minMatches)
-            {
-                return true;
-            }
-            return false;
         }
 
-        private static bool FindHorizontalMatches(Tile tile, out List<Tile> tiles, int minMatches = 2)
+        private static void ClearBuffer()
         {
-            tiles = new();
-
-            if (FindMatchInDirection(tile, DirectionType.Left, out List<Tile> leftMatches, 1))
-            {
-                tiles = tiles.Union(leftMatches).ToList();
-            }
-            if (FindMatchInDirection(tile, DirectionType.Right, out List<Tile> rightMatches, 1))
-            {
-                tiles = tiles.Union(rightMatches).ToList();
-            }
-
-            if (tiles.Count >= minMatches)
-            {
-                return true;
-            }
-            return false;
+            processedTiles.Clear();
+            indexPointer = 0;
         }
 
-        private static bool FindVerticalMatches(Tile tile, out List<Tile> tiles, int minMatches = 2)
+        public static bool FindMatches(this Tile tile, out List<Tile> tiles, int minMatches = 2)
         {
-            tiles = new();
+            ClearBuffer();
 
-            if (FindMatchInDirection(tile, DirectionType.Up, out List<Tile> upMatches, 1))
-            {
-                tiles = tiles.Union(upMatches).ToList();
-            }
-            if (FindMatchInDirection(tile, DirectionType.Down, out List<Tile> downMatches, 1))
-            {
-                tiles = tiles.Union(downMatches).ToList();
-            }
+            tile.FindHorizontalMatches(minMatches);
 
-            if (tiles.Count >= minMatches)
-            {
-                return true;
-            }
-            return false;
+            tile.FindVerticalMatches(minMatches);
+
+            tiles = new List<Tile>(processedTiles);
+
+            return tiles.Count >= minMatches;
         }
 
-        public static bool FindMatchInDirection(Tile tile, DirectionType direction, out List<Tile> tiles, int minMatches = 2)
+        private static void FindHorizontalMatches(this Tile tile, int minMatches = 2)
         {
-            tiles = new();
+            var foundMatches = 0;
+            foundMatches += tile.FindMatchInDirection(DirectionType.Left, 1);
 
-            while (GetMatchingNeighbour(tile, direction, out Tile foundTile))
+            foundMatches += tile.FindMatchInDirection(DirectionType.Right, 1);
+
+            if (foundMatches > 0 && foundMatches < minMatches)
             {
-                tiles.Add(foundTile);
+                processedTiles.RemoveRange(indexPointer - 1, foundMatches);
+                indexPointer -= foundMatches;
+            }
+        }
+
+        private static void FindVerticalMatches(this Tile tile, int minMatches = 2)
+        {
+            var foundMatches = 0;
+            foundMatches += tile.FindMatchInDirection(DirectionType.Up, 1);
+
+            foundMatches += tile.FindMatchInDirection(DirectionType.Down, 1);
+
+            if (foundMatches > 0 && foundMatches < minMatches)
+            {
+                processedTiles.RemoveRange(indexPointer - 1, foundMatches);
+                indexPointer -= foundMatches;
+            }
+        }
+
+        private static int FindMatchInDirection(this Tile tile, DirectionType direction, int minMatches = 2)
+        {
+            var counter = 0;
+            while (tile.GetMatchingNeighbour(direction, out Tile foundTile))
+            {
+                AddMember(foundTile);
                 tile = foundTile;
+                counter++;
             }
-            if (tiles.Count >= minMatches)
+            if (counter > 0 && counter < minMatches)
             {
-                return true;
+                processedTiles.RemoveRange(indexPointer - 1, counter);
+                indexPointer -= counter;
+                return 0;
             }
-            return false;
+            return counter;
         }
 
-        public static bool HasMatchInDirection(Tile tile, DirectionType direction, int minMatches = 3)
+        public static bool HasMatchInDirection(this Tile tile, DirectionType direction, int minMatches = 3)
         {
             var foundMatches = 1;
-            while (GetMatchingNeighbour(tile, direction, out Tile foundTile))
+            while (tile.GetMatchingNeighbour(direction, out Tile foundTile))
             {
                 foundMatches++;
                 tile = foundTile;
@@ -96,7 +99,7 @@ namespace Main.Gameplay
             return false;
         }
 
-        private static bool GetMatchingNeighbour(Tile tile, DirectionType direction, out Tile matchingTile)
+        private static bool GetMatchingNeighbour(this Tile tile, DirectionType direction, out Tile matchingTile)
         {
             if (tile.Neighbours.ContainsKey(direction))
             {

@@ -84,7 +84,7 @@ namespace Main.Gameplay
                 neighbour.SetPiece(currentPiece);
                 SetPiece(neighbourPiece);
 
-                var neighbourMatchCheck = MatchFinder.FindMatches(neighbour, out List<Tile> neighbourMatches);
+                var neighbourMatchCheck = neighbour.FindMatches(out List<Tile> neighbourMatches);
                 if (neighbourMatchCheck)
                 {
                     neighbourMatches.Add(neighbour);
@@ -94,7 +94,7 @@ namespace Main.Gameplay
                     neighbourMatches.Clear();
                 }
 
-                var currentMatchCheck = MatchFinder.FindMatches(this, out List<Tile> currentMatches);
+                var currentMatchCheck = this.FindMatches(out List<Tile> currentMatches);
                 if (currentMatchCheck)
                 {
                     currentMatches.Add(this);
