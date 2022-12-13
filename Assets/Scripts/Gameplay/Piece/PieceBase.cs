@@ -38,21 +38,18 @@ namespace Main.Gameplay.Piece
 
         public void FallTo(Tile targetTile)
         {
-            if (fallCo != null) return;
-            fallCo = FallCo(targetTile);
-            StartCoroutine(fallCo);
+            StartCoroutine(FallCo(targetTile));
         }
 
         private IEnumerator FallCo(Tile targetTile)
         {
             targetTile.SetPiece(this);
-            while (Vector3.Distance(transform.position, targetTile.transform.position) > 0.1f)
+            while (Vector3.Distance(transform.position, targetTile.transform.position) > 0.05f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, targetTile.transform.position, Time.deltaTime * fallSpeed);
                 yield return null;
             }
             transform.position = targetTile.transform.position;
-            StopCoroutine(fallCo);
         }
     }
 }

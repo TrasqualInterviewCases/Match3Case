@@ -25,7 +25,7 @@ namespace Main.Gameplay.Command
                     var curTile = _board.Tiles[_tiles[i].X, j];
                     if (curTile.Piece != null)
                     {
-                        curTile.Piece.FallTo(fallTarget);
+                        curTile.MakePieceFall(fallTarget);
                         fallTarget = _board.Tiles[fallTarget.X, fallTarget.Y + 1];
                     }
                 }

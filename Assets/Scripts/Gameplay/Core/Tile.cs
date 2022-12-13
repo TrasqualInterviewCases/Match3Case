@@ -140,5 +140,14 @@ namespace Main.Gameplay
 
             return neighbourMatchCheck || currentMatchCheck;
         }
+
+        public void MakePieceFall(Tile target)
+        {
+            if (Piece != null)
+            {
+                Piece.FallTo(target);
+                Piece = null;
+            }
+        }
     }
 }
