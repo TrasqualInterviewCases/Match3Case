@@ -45,13 +45,13 @@ namespace Main.Gameplay.Piece
 
         private IEnumerator FallCo(Tile targetTile)
         {
+            targetTile.SetPiece(this);
             while (Vector3.Distance(transform.position, targetTile.transform.position) > 0.1f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, targetTile.transform.position, Time.deltaTime * fallSpeed);
                 yield return null;
             }
             transform.position = targetTile.transform.position;
-            targetTile.SetPiece(this);
             StopCoroutine(fallCo);
         }
     }

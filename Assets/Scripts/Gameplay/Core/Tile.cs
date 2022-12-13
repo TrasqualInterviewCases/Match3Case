@@ -1,3 +1,4 @@
+using Main.Gameplay.Command;
 using Main.Gameplay.Enums;
 using Main.Gameplay.Piece;
 using Main.Gameplay.StateMachineSystem;
@@ -87,8 +88,12 @@ namespace Main.Gameplay
                     {
                         combinedMatches[i].PopPiece();
                     }
-                    //DO Falls and Fills And then Do StateChange
-                    StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
+                    var fallCommand = new FallCommand();
+                    fallCommand.Init(combinedMatches, _board);
+                    fallCommand.Execute(() =>
+                    {
+                        StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
+                    });
                 }
                 else
                 {
