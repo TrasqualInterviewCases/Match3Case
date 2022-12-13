@@ -1,8 +1,6 @@
 using Main.Gameplay.Enums;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
-using System;
 
 namespace Main.Gameplay
 {
@@ -83,7 +81,7 @@ namespace Main.Gameplay
             return false;
         }
 
-        public static bool FindMatchInDirection(Tile tile, DirectionType direction, int minMatches = 3)
+        public static bool HasMatchInDirection(Tile tile, DirectionType direction, int minMatches = 3)
         {
             var foundMatches = 1;
             while (GetMatchingNeighbour(tile, direction, out Tile foundTile))

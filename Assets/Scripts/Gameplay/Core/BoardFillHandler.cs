@@ -27,9 +27,9 @@ public class BoardFillHandler : MonoBehaviour
 
     private bool CheckInitialMatch(Tile tileToCheck)
     {
-        var downMatch = MatchFinder.FindMatchInDirection(tileToCheck, DirectionType.Down);
+        var downMatch = MatchFinder.HasMatchInDirection(tileToCheck, DirectionType.Down);
 
-        var leftMatch = MatchFinder.FindMatchInDirection(tileToCheck, DirectionType.Left);
+        var leftMatch = MatchFinder.HasMatchInDirection(tileToCheck, DirectionType.Left);
 
         return downMatch || leftMatch;
     }

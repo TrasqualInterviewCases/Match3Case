@@ -67,6 +67,11 @@ namespace Main.Gameplay
                 return;
             }
 
+            ProcessInput(direction);
+        }
+
+        private void ProcessInput(DirectionType direction)
+        {
             var neighbour = Neighbours[direction];
 
             var neighbourPiece = neighbour.Piece;
