@@ -1,36 +1,23 @@
 using Main.Gameplay.Enums;
 using Main.Gameplay.Piece;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PieceProvider : Singleton<PieceProvider>
 {
-    [SerializeField] Sprite redSprite;
-    [SerializeField] Sprite greenSprite;
-    [SerializeField] Sprite blueSprite;
-    [SerializeField] Sprite yellowSprite;
+    [SerializeField] List<PieceData> pieceDatas = new();
 
     public PieceBase GetRandomPiece()
     {
         var newPiece = ObjectPoolManager.Instance.GetObject<PieceBase>();
         var randType = EnumUtilities.GetRandomFromEnum<PieceType>();
-        newPiece.Init(randType, GetSpriteByType(randType));
+        newPiece.Init(GetDataByType(randType));
         return newPiece;
     }
 
-    private Sprite GetSpriteByType(PieceType pieceType)
+    private PieceData GetDataByType(PieceType pieceType)
     {
-        switch (pieceType)
-        {
-            case PieceType.Red:
-                return redSprite;
-            case PieceType.Green:
-                return greenSprite;
-            case PieceType.Blue:
-                return blueSprite;
-            case PieceType.Yellow:
-                return yellowSprite;
-            default:
-                return null;
-        }
+        return pieceDatas.FirstOrDefault((data) => data.pieceType == pieceType);
     }
 }

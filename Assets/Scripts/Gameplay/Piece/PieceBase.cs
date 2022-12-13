@@ -6,10 +6,14 @@ namespace Main.Gameplay.Piece
 {
     public class PieceBase : MonoBehaviour
     {
-        [field: SerializeField] public PieceType PieceType { get; private set; }
         [SerializeField] float fallSpeed = 5f;
 
+        PieceData _pieceData;
+        public PieceType PieceType => _pieceData.pieceType;
+
         SpriteRenderer spriteRenderer;
+
+        IEnumerator fallCo;
 
         private void Awake()
         {
@@ -26,15 +30,17 @@ namespace Main.Gameplay.Piece
             gameObject.name = GetType().Name + $"({tile.X}, {tile.Y})";
         }
 
-        public void Init(PieceType pieceType, Sprite pieceSprite)
+        public void Init(PieceData pieceData)
         {
-            spriteRenderer.sprite = pieceSprite;
-            PieceType = pieceType;
+            _pieceData = pieceData;
+            spriteRenderer.sprite = pieceData.pieceVisual;
         }
 
         public void FallTo(Tile targetTile)
         {
-            StartCoroutine(FallCo(targetTile));
+            if (fallCo != null) return;
+            fallCo = FallCo(targetTile);
+            StartCoroutine(fallCo);
         }
 
         private IEnumerator FallCo(Tile targetTile)
@@ -46,6 +52,7 @@ namespace Main.Gameplay.Piece
             }
             transform.position = targetTile.transform.position;
             targetTile.SetPiece(this);
+            StopCoroutine(fallCo);
         }
     }
 }

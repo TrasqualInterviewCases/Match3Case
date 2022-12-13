@@ -10,9 +10,6 @@ namespace Main.Gameplay
 {
     public class Tile : MonoBehaviour
     {
-        public event Action<Tile> OnTileEmptied;
-        public event Action<Tile> OnTileFilled;
-
         public int X { get; private set; }
         public int Y { get; private set; }
 
@@ -39,7 +36,6 @@ namespace Main.Gameplay
         {
             Piece = piece;
             Piece.SetOwnerTile(this);
-            OnTileFilled?.Invoke(this);
         }
 
         public void SetupNeighbours()
@@ -78,37 +74,14 @@ namespace Main.Gameplay
             var neighbourPiece = neighbour.Piece;
             var currentPiece = Piece;
 
+            neighbour.SetPiece(currentPiece);
+            SetPiece(neighbourPiece);
+
             var pieceSwapper = ObjectPoolManager.Instance.GetObject<SwapPieceCommand>();
             pieceSwapper.Init(currentPiece, neighbourPiece, 5f, () =>
             {
-                neighbour.SetPiece(currentPiece);
-                SetPiece(neighbourPiece);
-
-                var neighbourMatchCheck = neighbour.FindMatches(out List<Tile> neighbourMatches);
-                if (neighbourMatchCheck)
+                if (CheckMatchesOnSwappedTiles(neighbour, out List<Tile> combinedMatches))
                 {
-                    neighbourMatches.Add(neighbour);
-                }
-                else
-                {
-                    neighbourMatches.Clear();
-                }
-
-                var currentMatchCheck = this.FindMatches(out List<Tile> currentMatches);
-                if (currentMatchCheck)
-                {
-                    currentMatches.Add(this);
-                }
-                else
-                {
-                    currentMatches.Clear();
-                }
-
-
-                if (neighbourMatchCheck || currentMatchCheck)
-                {
-                    var combinedMatches = neighbourMatches.Union(currentMatches).ToList();
-
                     //process matches;
                     for (int i = 0; i < combinedMatches.Count; i++)
                     {
@@ -134,7 +107,33 @@ namespace Main.Gameplay
         {
             ObjectPoolManager.Instance.ReleaseObject(Piece);
             Piece = null;
-            OnTileEmptied?.Invoke(this);
+        }
+
+        private bool CheckMatchesOnSwappedTiles(Tile neighbour, out List<Tile> combinedMatches)
+        {
+            var neighbourMatchCheck = neighbour.FindMatches(out List<Tile> neighbourMatches);
+            if (neighbourMatchCheck)
+            {
+                neighbourMatches.Add(neighbour);
+            }
+            else
+            {
+                neighbourMatches.Clear();
+            }
+
+            var currentMatchCheck = this.FindMatches(out List<Tile> currentMatches);
+            if (currentMatchCheck)
+            {
+                currentMatches.Add(this);
+            }
+            else
+            {
+                currentMatches.Clear();
+            }
+
+            combinedMatches = neighbourMatches.Union(currentMatches).ToList();
+
+            return neighbourMatchCheck || currentMatchCheck;
         }
     }
 }

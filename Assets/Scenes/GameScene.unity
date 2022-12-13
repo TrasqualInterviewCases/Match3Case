@@ -482,10 +482,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9920af4ae06b3c847b3e983560606fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  redSprite: {fileID: 21300000, guid: 2423f28dfa7850e42ad225d13493bd9d, type: 3}
-  greenSprite: {fileID: 21300000, guid: 0a3f94b0a2909f944a08fc0c8d776db6, type: 3}
-  blueSprite: {fileID: 21300000, guid: 0b05d09344bf86e488eb63693f41cbd0, type: 3}
-  yellowSprite: {fileID: 21300000, guid: 3be8ab08f35290942bf6dea6f016714b, type: 3}
+  pieceDatas:
+  - {fileID: 11400000, guid: 3fe077555c1c9d043b8eb68941ba5b3b, type: 2}
+  - {fileID: 11400000, guid: a592e77c721f7584486c104870807595, type: 2}
+  - {fileID: 11400000, guid: 80a338695f581084f87a331c37250236, type: 2}
+  - {fileID: 11400000, guid: 6979d4f14e71ef44a9b0dfff972c3713, type: 2}
 --- !u!4 &1898529537
 Transform:
   m_ObjectHideFlags: 0
