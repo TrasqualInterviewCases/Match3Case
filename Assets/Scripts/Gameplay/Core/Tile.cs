@@ -1,6 +1,7 @@
 using Main.Gameplay.Enums;
 using Main.Gameplay.Piece;
 using Main.Gameplay.StateMachineSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,6 +10,9 @@ namespace Main.Gameplay
 {
     public class Tile : MonoBehaviour
     {
+        public event Action<Tile> OnTileEmptied;
+        public event Action<Tile> OnTileFilled;
+
         public int X { get; private set; }
         public int Y { get; private set; }
 
@@ -18,11 +22,7 @@ namespace Main.Gameplay
 
         public Dictionary<DirectionType, Tile> Neighbours { get; private set; } = new Dictionary<DirectionType, Tile>();
 
-        [Header("Debug Neighbours")]
-        [SerializeField] Tile neighbourUp;
-        [SerializeField] Tile neighbourDown;
-        [SerializeField] Tile neighbourLeft;
-        [SerializeField] Tile neighbourRight;
+        public Tile fallTarget;
 
         public void Init(int x, int y, Board board)
         {
@@ -39,6 +39,7 @@ namespace Main.Gameplay
         {
             Piece = piece;
             Piece.SetOwnerTile(this);
+            OnTileFilled?.Invoke(this);
         }
 
         public void SetupNeighbours()
@@ -46,16 +47,16 @@ namespace Main.Gameplay
             Neighbours.Clear();
 
             if (X >= 0 && X < _board.Columns - 1)
-                neighbourRight = Neighbours[DirectionType.Right] = _board.Tiles[X + 1, Y];
+                Neighbours[DirectionType.Right] = _board.Tiles[X + 1, Y];
 
             if (X > 0 && X <= _board.Columns - 1)
-                neighbourLeft = Neighbours[DirectionType.Left] = _board.Tiles[X - 1, Y];
+                Neighbours[DirectionType.Left] = _board.Tiles[X - 1, Y];
 
             if (Y >= 0 && Y < _board.Rows - 1)
-                neighbourUp = Neighbours[DirectionType.Up] = _board.Tiles[X, Y + 1];
+                Neighbours[DirectionType.Up] = _board.Tiles[X, Y + 1];
 
             if (Y > 0 && Y <= _board.Rows - 1)
-                neighbourDown = Neighbours[DirectionType.Down] = _board.Tiles[X, Y - 1];
+                fallTarget = Neighbours[DirectionType.Down] = _board.Tiles[X, Y - 1];
         }
 
         public void RecieveInputDirection(DirectionType direction)
@@ -111,9 +112,7 @@ namespace Main.Gameplay
                     //process matches;
                     for (int i = 0; i < combinedMatches.Count; i++)
                     {
-                        var piece = combinedMatches[i].Piece;
-                        combinedMatches[i].Piece = null;
-                        ObjectPoolManager.Instance.ReleaseObject(piece);
+                        combinedMatches[i].PopPiece();
                     }
                     //DO Falls and Fills And then Do StateChange
                     StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
@@ -129,6 +128,13 @@ namespace Main.Gameplay
                     });
                 }
             });
+        }
+
+        public void PopPiece()
+        {
+            ObjectPoolManager.Instance.ReleaseObject(Piece);
+            Piece = null;
+            OnTileEmptied?.Invoke(this);
         }
     }
 }
