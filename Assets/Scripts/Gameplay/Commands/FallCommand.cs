@@ -7,6 +7,7 @@ namespace Main.Gameplay.CommandSystem
     public class FallCommand : ICommand
     {
         List<Tile> _tiles;
+
         public FallCommand(List<Tile> tiles)
         {
             _tiles = tiles;

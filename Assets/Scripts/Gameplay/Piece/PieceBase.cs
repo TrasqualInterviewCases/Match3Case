@@ -1,6 +1,7 @@
 using Main.Gameplay.Core;
 using Main.Gameplay.Enums;
 using Main.ObjectPooling;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -59,6 +60,19 @@ namespace Main.Gameplay.Piece
 
         public void Pop()
         {
+            StartCoroutine(PlayAnimation());
+        }
+
+        private IEnumerator PlayAnimation()
+        {
+            var t = 0f;
+            while (t < 1f)
+            {
+                t += Time.deltaTime * 5f;
+                transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 1.15f, t);
+                yield return null;
+            }
+            transform.localScale = Vector3.one;
             ObjectPoolManager.Instance.ReleaseObject(this);
         }
     }
