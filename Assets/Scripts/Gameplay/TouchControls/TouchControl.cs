@@ -5,10 +5,12 @@ using UnityEngine;
 
 namespace Main.Gameplay.TouchControls
 {
+    [RequireComponent(typeof(PieceSwapper))]
     public class TouchControl : MonoBehaviour
     {
         [SerializeField] float minSwipeDistance = 10;
 
+        PieceSwapper pieceSwapper;
         Camera cam;
 
         private Vector2 startPos;
@@ -19,6 +21,7 @@ namespace Main.Gameplay.TouchControls
         private void Awake()
         {
             cam = Camera.main;
+            pieceSwapper = GetComponent<PieceSwapper>();
         }
 
         private void Update()
@@ -45,9 +48,11 @@ namespace Main.Gameplay.TouchControls
                 endPos = Input.mousePosition;
                 if (CalculateSwipeDirection(out DirectionType direction))
                 {
-                    StateMachine.Instance.ChangeState(StateMachine.Instance.AnimationState);
-                    var swap = ObjectPoolManager.Instance.GetObject<SwapPieceCommand>();
-                    swap.Init(_selectedTile, direction, 5f);
+                    if (_selectedTile.CanSwap(direction))
+                    {
+                        pieceSwapper.Init(_selectedTile, direction);
+                        StateMachine.Instance.ChangeState(StateMachine.Instance.AnimationState);
+                    }
                     _selectedTile = null;
                 }
             }

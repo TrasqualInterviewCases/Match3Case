@@ -1,3 +1,4 @@
+using Main.Gameplay.Command;
 using UnityEngine;
 
 namespace Main.Gameplay.StateMachineSystem
@@ -10,6 +11,7 @@ namespace Main.Gameplay.StateMachineSystem
 
         public override void EnterState()
         {
+            CommandManager.Instance.ExecuteCommands();
         }
 
         public override void ExitState()

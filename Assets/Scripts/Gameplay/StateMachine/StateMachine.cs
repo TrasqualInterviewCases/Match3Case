@@ -1,3 +1,5 @@
+using Main.Gameplay.Command;
+using Main.Gameplay.Enums;
 using Main.Gameplay.TouchControls;
 using System;
 using UnityEngine;
@@ -18,6 +20,7 @@ namespace Main.Gameplay.StateMachineSystem
         protected override void Awake()
         {
             base.Awake();
+
             TouchState = new TouchState(this);
             AnimationState = new AnimationState(this);
 

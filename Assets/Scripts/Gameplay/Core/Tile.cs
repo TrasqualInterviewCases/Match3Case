@@ -1,6 +1,7 @@
+using Main.Gameplay.Command;
 using Main.Gameplay.Enums;
 using Main.Gameplay.Piece;
-using System;
+using Main.Gameplay.StateMachineSystem;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -41,19 +42,9 @@ namespace Main.Gameplay
             if (MatchFinder.FindMatches(this, out List<Tile> foundMatches))
             {
                 foundMatches.Add(this);
-                //for (int i = 0; i < foundMatches.Count; i++)
-                //{
-                //    Debug.Log(foundMatches[i].name);
-                //}
-                for (int i = 0; i < foundMatches.Count; i++)
-                {
-                    foundMatches[i].PopPiece();
-                }
-                //foundMatches.Sort((tile1, tile2) => tile1.Y.CompareTo(tile2.Y));
-                //for (int i = 0; i < foundMatches.Count; i++)
-                //{
-                //    foundMatches[i].ClearTile();
-                //}
+
+                new PiecePopCommand(foundMatches);
+
                 return true;
             }
             else
@@ -85,9 +76,8 @@ namespace Main.Gameplay
             Piece = null;
         }
 
-        public void ClearTile()
+        public void RequestPiece()
         {
-            Piece = null;
             if (GetNeighbourInDirection(DirectionType.Up, out var neighbour))
             {
                 neighbour.DoFall();
@@ -110,12 +100,17 @@ namespace Main.Gameplay
             if (Piece != null)
             {
                 Piece.FallTo(Neighbours[DirectionType.Down]);
-                ClearTile();
+                RequestPiece();
             }
             else if (GetNeighbourInDirection(DirectionType.Up, out var neighbour))
             {
                 neighbour.DoFall();
             }
+        }
+
+        public bool CanSwap(DirectionType direction)
+        {
+            return Piece != null && GetNeighbourInDirection(direction, out var neighbour) && neighbour.Piece != null;
         }
     }
 }

@@ -1,56 +1,41 @@
 using Main.Gameplay.Enums;
 using Main.Gameplay.Piece;
-using Main.Gameplay.StateMachineSystem;
 using System;
 using System.Collections;
 using UnityEngine;
 
 namespace Main.Gameplay.Command
 {
-    public class SwapPieceCommand : MonoBehaviour, ICommand
+    public class PieceSwapper : MonoBehaviour, ICommand
     {
         Tile _firstTile;
         Tile _secondTile;
         PieceBase _firstPiece;
         PieceBase _secondPiece;
-        float _speed;
 
         Vector3 firstPiecePos;
         Vector3 secondPiecePos;
 
         IEnumerator movementCo;
 
-        public void Init(Tile firstTile, DirectionType direction, float speed)
+
+        public void Init(Tile firstTile, DirectionType direction)
         {
             _firstTile = firstTile;
-            if (!_firstTile.GetNeighbourInDirection(direction, out var neighbour))
-            {
-                StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
-                ObjectPoolManager.Instance.ReleaseObject(this);
-                return;
-            }
-            if(neighbour.Piece == null)
-            {
-                StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
-                ObjectPoolManager.Instance.ReleaseObject(this);
-                return;
-            }
-            _secondTile = neighbour;
+            _firstTile.GetNeighbourInDirection(direction, out _secondTile);
             _firstPiece = _firstTile.Piece;
             _secondPiece = _secondTile.Piece;
-            _speed = speed;
             firstPiecePos = _firstPiece.transform.position;
             secondPiecePos = _secondPiece.transform.position;
-
-            Execute();
+            CommandManager.Instance.AddCommand(this);
         }
 
-        IEnumerator MovePiecesCo(Vector3 firstPieceTarget, Vector3 secondPieceTarget, float speed, Action OnComplete)
+        IEnumerator MovePiecesCo(Vector3 firstPieceTarget, Vector3 secondPieceTarget, Action OnComplete)
         {
             while (Vector3.Distance(_firstPiece.transform.position, firstPieceTarget) > 0.1f && Vector3.Distance(_secondPiece.transform.position, secondPieceTarget) > 0.1f)
             {
-                _firstPiece.transform.position = Vector3.MoveTowards(_firstPiece.transform.position, firstPieceTarget, Time.deltaTime * speed);
-                _secondPiece.transform.position = Vector3.MoveTowards(_secondPiece.transform.position, secondPieceTarget, Time.deltaTime * speed);
+                _firstPiece.transform.position = Vector3.MoveTowards(_firstPiece.transform.position, firstPieceTarget, Time.deltaTime * 5f);
+                _secondPiece.transform.position = Vector3.MoveTowards(_secondPiece.transform.position, secondPieceTarget, Time.deltaTime * 5f);
                 yield return null;
             }
             _firstPiece.transform.position = firstPieceTarget;
@@ -58,10 +43,10 @@ namespace Main.Gameplay.Command
             OnComplete();
         }
 
-        public void Execute()
+        public void Execute(Action OnComplete)
         {
             StopPreviousMovement();
-            movementCo = MovePiecesCo(secondPiecePos, firstPiecePos, _speed, () =>
+            movementCo = MovePiecesCo(secondPiecePos, firstPiecePos, () =>
             {
                 _firstTile.SetPiece(_secondPiece);
                 _secondTile.SetPiece(_firstPiece);
@@ -69,26 +54,24 @@ namespace Main.Gameplay.Command
                 var secondPieceMatched = _secondTile.CheckPiece();
                 if (!firstPieceMatched && !secondPieceMatched)
                 {
-                    Rewind();
+                    Rewind(OnComplete);
                 }
                 else
                 {
-                    StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
-                    ObjectPoolManager.Instance.ReleaseObject(this);
+                    OnComplete();
                 }
             });
             StartCoroutine(movementCo);
         }
 
-        public void Rewind()
+        public void Rewind(Action OnComplete)
         {
             StopPreviousMovement();
-            movementCo = MovePiecesCo(firstPiecePos, secondPiecePos, _speed, () =>
+            movementCo = MovePiecesCo(firstPiecePos, secondPiecePos, () =>
             {
                 _firstTile.SetPiece(_firstPiece);
                 _secondTile.SetPiece(_secondPiece);
-                StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
-                ObjectPoolManager.Instance.ReleaseObject(this);
+                OnComplete();
             });
             StartCoroutine(movementCo);
         }
