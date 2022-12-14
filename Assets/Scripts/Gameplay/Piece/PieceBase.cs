@@ -68,7 +68,7 @@ namespace Main.Gameplay.Piece
             var t = 0f;
             while (t < 1f)
             {
-                t += Time.deltaTime * 5f;
+                t += Time.deltaTime * 10f;
                 transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 1.15f, t);
                 yield return null;
             }
