@@ -1,54 +1,24 @@
-using Main.Gameplay;
-using Main.Gameplay.Command;
 using System;
 using System.Collections.Generic;
 
-public class FallCommand : ICommand
+namespace Main.Gameplay.Command
 {
-    List<Tile> _tiles;
-    Board _board;
-    public FallCommand(List<Tile> tiles, Board board)
+    public class FallCommand : ICommand
     {
-        _tiles = tiles;
-        _board = board;
-        CommandManager.Instance.AddCommand(this);
-    }
-
-    public void Execute(Action OnCompleted)
-    {
-        var columns = GetColumns();
-        for (int i = 0; i < columns.Count; i++)
+        List<Tile> _tiles;
+        public FallCommand(List<Tile> tiles)
         {
-            for (int j = 0; j < _board.Rows - 1; j++)
-            {
-                var emptyTile = _board.Tiles[columns[i], j];
-                if (emptyTile.Piece == null)
-                {
-                    for (int k = j + 1; k < _board.Rows; k++)
-                    {
-                        var filledTile = _board.Tiles[columns[i], k];
-                        if (filledTile.Piece != null)
-                        {
-                            filledTile.DoFall(emptyTile);
-                            break;
-                        }
-                    }
-                }
-            }
+            _tiles = tiles;
+            CommandManager.Instance.AddCommand(this);
         }
-        OnCompleted();
-    }
 
-    private List<int> GetColumns()
-    {
-        var colums = new List<int>();
-        for (int i = 0; i < _tiles.Count; i++)
+        public void Execute(Action OnCompleted)
         {
-            if (!colums.Contains(_tiles[i].X))
+            foreach (var tile in _tiles)
             {
-                colums.Add(_tiles[i].X);
+                tile.RequestPiece();
             }
+            OnCompleted();
         }
-        return colums;
     }
 }

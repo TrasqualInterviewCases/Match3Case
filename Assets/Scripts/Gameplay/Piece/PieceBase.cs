@@ -50,9 +50,9 @@ namespace Main.Gameplay.Piece
                 transform.position = Vector3.MoveTowards(transform.position, targetTile.transform.position, Time.deltaTime * fallSpeed);
                 yield return null;
             }
-            targetTile.RecievePiece(this);
             transform.position = targetTile.transform.position;
             isFalling = false;
+            targetTile.RecievePiece(this);
         }
 
         public void Pop()

@@ -1,6 +1,7 @@
 using Main.Gameplay.Command;
 using Main.Gameplay.Enums;
 using Main.Gameplay.Piece;
+using Main.Gameplay.StateMachineSystem;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,6 +40,17 @@ namespace Main.Gameplay
         public void RecievePiece(PieceBase piece)
         {
             SetPiece(piece);
+            if (GetNeighbourInDirection(DirectionType.Down, out var lowerNeighbour) && lowerNeighbour.Piece == null)
+            {
+                DoFall();
+            }
+            else
+            {
+                if (TryMatch())
+                {
+                    StateMachine.Instance.ChangeState(StateMachine.Instance.AnimationState);
+                }
+            }
         }
 
         public bool TryMatch()
@@ -48,7 +60,7 @@ namespace Main.Gameplay
                 foundMatches.Add(this);
 
                 new PiecePopCommand(foundMatches);
-                new FallCommand(foundMatches, _board);
+                new FallCommand(foundMatches);
 
                 return true;
             }
@@ -77,7 +89,6 @@ namespace Main.Gameplay
 
         public void PopPiece()
         {
-            if (Piece == null) return;
             Piece.Pop();
             Piece = null;
         }
@@ -93,13 +104,22 @@ namespace Main.Gameplay
             return false;
         }
 
-        public void DoFall(Tile targetTile)
+        public void RequestPiece()
+        {
+            if (GetNeighbourInDirection(DirectionType.Up, out var upperNeighbour))
+            {
+                upperNeighbour.DoFall();
+            }
+        }
+
+        public void DoFall()
         {
             if (Piece != null)
             {
-                Piece.FallTo(targetTile);
+                Piece.FallTo(Neighbours[DirectionType.Down]);
                 Piece = null;
             }
+            RequestPiece();
         }
 
         public bool CanSwap(DirectionType direction)
