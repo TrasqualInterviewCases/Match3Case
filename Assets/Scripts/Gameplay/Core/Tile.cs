@@ -85,8 +85,7 @@ namespace Main.Gameplay
             Piece = null;
             if (GetNeighbourInDirection(DirectionType.Up, out var neighbour))
             {
-                if (neighbour.Piece != null)
-                    neighbour.DoFall();
+                neighbour.DoFall();
             }
         }
 
@@ -103,8 +102,15 @@ namespace Main.Gameplay
 
         public void DoFall()
         {
-            Piece.FallTo(Neighbours[DirectionType.Down]);
-            EmptyTile();
+            if (Piece != null)
+            {
+                Piece.FallTo(Neighbours[DirectionType.Down]);
+                EmptyTile();
+            }
+            else if (GetNeighbourInDirection(DirectionType.Up, out var neighbour))
+            {
+                neighbour.DoFall();
+            }
         }
     }
 }
