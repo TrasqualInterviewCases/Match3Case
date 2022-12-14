@@ -1,6 +1,6 @@
 using System;
 
-namespace Main.Gameplay.Command
+namespace Main.Gameplay.CommandSystem
 {
     public interface ICommand
     {

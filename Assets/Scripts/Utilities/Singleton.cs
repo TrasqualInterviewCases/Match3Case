@@ -1,15 +1,18 @@
 using UnityEngine;
 
-public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+namespace Main.Utilities
 {
-    public static T Instance;
-
-    protected virtual void Awake()
+    public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
-        if (Instance != null)
+        public static T Instance;
+
+        protected virtual void Awake()
         {
-            Destroy(Instance);
+            if (Instance != null)
+            {
+                Destroy(Instance);
+            }
+            Instance = this as T;
         }
-        Instance = this as T;
     }
 }

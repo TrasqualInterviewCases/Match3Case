@@ -2,12 +2,15 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class EnumUtilities : MonoBehaviour
+namespace Main.Utilities
 {
-    public static T GetRandomFromEnum<T>()
+    public class EnumUtilities : MonoBehaviour
     {
-        var values = Enum.GetValues(typeof(T));
-        int rand = Random.Range(0, values.Length);
-        return (T)values.GetValue(rand);
+        public static T GetRandomFromEnum<T>()
+        {
+            var values = Enum.GetValues(typeof(T));
+            int rand = Random.Range(0, values.Length);
+            return (T)values.GetValue(rand);
+        }
     }
 }

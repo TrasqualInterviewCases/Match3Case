@@ -1,11 +1,11 @@
-using Main.Gameplay.Command;
+using Main.Gameplay.CommandSystem;
 using Main.Gameplay.Enums;
 using Main.Gameplay.Piece;
 using Main.Gameplay.StateMachineSystem;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Main.Gameplay
+namespace Main.Gameplay.Core
 {
     public class Tile : MonoBehaviour
     {

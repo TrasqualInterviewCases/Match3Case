@@ -1,4 +1,4 @@
-using Main.Gameplay.Command;
+using Main.Gameplay.CommandSystem;
 using UnityEngine;
 
 namespace Main.Gameplay.StateMachineSystem

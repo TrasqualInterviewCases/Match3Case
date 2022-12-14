@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Main.Gameplay
+namespace Main.Gameplay.Core
 {
     public class Board : MonoBehaviour
     {
@@ -46,3 +46,6 @@ namespace Main.Gameplay
         }
     }
 }
+
+
+

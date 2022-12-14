@@ -1,8 +1,7 @@
 using Main.Gameplay.Enums;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace Main.Gameplay
+namespace Main.Gameplay.Core
 {
     public static class MatchFinder
     {

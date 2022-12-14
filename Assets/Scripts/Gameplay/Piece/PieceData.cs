@@ -1,9 +1,12 @@
 using Main.Gameplay.Enums;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Piece Data")]
-public class PieceData : ScriptableObject
+namespace Main.Gameplay.Piece
 {
-    public Sprite pieceVisual;
-    public PieceType pieceType;
+	[CreateAssetMenu(menuName = "Piece Data")]
+	public class PieceData : ScriptableObject
+	{
+		public Sprite pieceVisual;
+		public PieceType pieceType;
+	} 
 }

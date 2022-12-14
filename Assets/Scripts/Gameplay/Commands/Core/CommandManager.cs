@@ -1,7 +1,8 @@
 using Main.Gameplay.StateMachineSystem;
+using Main.Utilities;
 using System.Collections.Generic;
 
-namespace Main.Gameplay.Command
+namespace Main.Gameplay.CommandSystem
 {
     public class CommandManager : Singleton<CommandManager>
     {

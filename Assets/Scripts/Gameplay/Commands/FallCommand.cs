@@ -1,7 +1,8 @@
+using Main.Gameplay.Core;
 using System;
 using System.Collections.Generic;
 
-namespace Main.Gameplay.Command
+namespace Main.Gameplay.CommandSystem
 {
     public class FallCommand : ICommand
     {

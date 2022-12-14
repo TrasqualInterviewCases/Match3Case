@@ -1,36 +1,40 @@
-using Main.Gameplay;
 using Main.Gameplay.Enums;
+using Main.Gameplay.Piece;
+using Main.ObjectPooling;
 using UnityEngine;
 
-public class BoardFillHandler : MonoBehaviour
+namespace Main.Gameplay.Core
 {
-    public void DoInitialFill(Tile[,] tiles)
+    public class BoardFillHandler : MonoBehaviour
     {
-        for (int i = 0; i < tiles.GetLength(1); i++)
+        public void DoInitialFill(Tile[,] tiles)
         {
-            for (int j = 0; j < tiles.GetLength(0); j++)
+            for (int i = 0; i < tiles.GetLength(1); i++)
             {
-                var newPiece = PieceProvider.Instance.GetRandomPiece();
-                tiles[j, i].SetPiece(newPiece);
-                newPiece.SetPosition(tiles[j, i].transform.position);
-
-                while (CheckInitialMatch(tiles[j, i]))
+                for (int j = 0; j < tiles.GetLength(0); j++)
                 {
-                    ObjectPoolManager.Instance.ReleaseObject(newPiece);
-                    newPiece = PieceProvider.Instance.GetRandomPiece();
+                    var newPiece = PieceProvider.Instance.GetRandomPiece();
                     tiles[j, i].SetPiece(newPiece);
                     newPiece.SetPosition(tiles[j, i].transform.position);
+
+                    while (CheckInitialMatch(tiles[j, i]))
+                    {
+                        ObjectPoolManager.Instance.ReleaseObject(newPiece);
+                        newPiece = PieceProvider.Instance.GetRandomPiece();
+                        tiles[j, i].SetPiece(newPiece);
+                        newPiece.SetPosition(tiles[j, i].transform.position);
+                    }
                 }
             }
         }
-    }
 
-    private bool CheckInitialMatch(Tile tileToCheck)
-    {
-        var downMatch = MatchFinder.HasMatchInDirection(tileToCheck, DirectionType.Down);
+        private bool CheckInitialMatch(Tile tileToCheck)
+        {
+            var downMatch = tileToCheck.HasMatchInDirection(DirectionType.Down);
 
-        var leftMatch = MatchFinder.HasMatchInDirection(tileToCheck, DirectionType.Left);
+            var leftMatch = tileToCheck.HasMatchInDirection(DirectionType.Left);
 
-        return downMatch || leftMatch;
+            return downMatch || leftMatch;
+        }
     }
 }

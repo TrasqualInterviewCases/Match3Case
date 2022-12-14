@@ -1,10 +1,11 @@
+using Main.Gameplay.Core;
 using Main.Gameplay.Enums;
 using Main.Gameplay.Piece;
 using System;
 using System.Collections;
 using UnityEngine;
 
-namespace Main.Gameplay.Command
+namespace Main.Gameplay.CommandSystem
 {
     public class PieceSwapper : MonoBehaviour, ICommand
     {
