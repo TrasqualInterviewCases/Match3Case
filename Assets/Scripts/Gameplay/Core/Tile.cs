@@ -36,6 +36,12 @@ namespace Main.Gameplay
             Piece.SetOwnerTile(this);
         }
 
+        public void RecievePiece(PieceBase piece)
+        {
+            SetPiece(piece);
+            //CheckPiece();
+        }
+
         public bool CheckPiece()
         {
             if (MatchFinder.FindMatches(this, out List<Tile> foundMatches))
