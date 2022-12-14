@@ -15,6 +15,8 @@ namespace Main.Gameplay.Core
         public int Y { get; private set; }
 
         Board _board;
+        PieceSpawner spawner;
+        bool spawnInProgress;
 
         public PieceBase Piece { get; private set; }
 
@@ -27,7 +29,11 @@ namespace Main.Gameplay.Core
             _board = board;
 
             transform.localPosition = new Vector3(X, Y, 0f);
-
+            if (Y >= _board.Rows - 1)
+            {
+                spawner = gameObject.AddComponent<PieceSpawner>();
+                spawner.Init(this);
+            }
             gameObject.name = $"({X},{Y})";
         }
 
@@ -39,6 +45,7 @@ namespace Main.Gameplay.Core
 
         public void RecievePiece(PieceBase piece)
         {
+            spawnInProgress = false;
             SetPiece(piece);
             if (GetNeighbourInDirection(DirectionType.Down, out var lowerNeighbour) && lowerNeighbour.Piece == null)
             {
@@ -89,6 +96,7 @@ namespace Main.Gameplay.Core
 
         public void PopPiece()
         {
+            if (Piece == null) return;
             Piece.Pop();
             Piece = null;
         }
@@ -109,6 +117,11 @@ namespace Main.Gameplay.Core
             if (GetNeighbourInDirection(DirectionType.Up, out var upperNeighbour))
             {
                 upperNeighbour.DoFall();
+            }
+            else if (spawner != null && !spawnInProgress)
+            {
+                spawner.SpawnPiece();
+                spawnInProgress = true;
             }
         }
 
