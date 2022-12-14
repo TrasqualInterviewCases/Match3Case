@@ -19,9 +19,21 @@ public class FallCommand : ICommand
         var columns = GetColumns();
         for (int i = 0; i < columns.Count; i++)
         {
-            for (int j = 0; j < _board.Rows; j++)
+            for (int j = 0; j < _board.Rows - 1; j++)
             {
-                _board.Tiles[columns[i], j].DoFall();
+                var emptyTile = _board.Tiles[columns[i], j];
+                if (emptyTile.Piece == null)
+                {
+                    for (int k = j + 1; k < _board.Rows; k++)
+                    {
+                        var filledTile = _board.Tiles[columns[i], k];
+                        if (filledTile.Piece != null)
+                        {
+                            filledTile.DoFall(emptyTile);
+                            break;
+                        }
+                    }
+                }
             }
         }
         OnCompleted();

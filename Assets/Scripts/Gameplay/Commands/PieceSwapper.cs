@@ -50,8 +50,8 @@ namespace Main.Gameplay.Command
             {
                 _firstTile.SetPiece(_secondPiece);
                 _secondTile.SetPiece(_firstPiece);
-                var firstPieceMatched = _firstTile.CheckPiece();
-                var secondPieceMatched = _secondTile.CheckPiece();
+                var firstPieceMatched = _firstTile.TryMatch();
+                var secondPieceMatched = _secondTile.TryMatch();
                 if (!firstPieceMatched && !secondPieceMatched)
                 {
                     Rewind(OnComplete);

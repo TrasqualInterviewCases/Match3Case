@@ -39,10 +39,9 @@ namespace Main.Gameplay
         public void RecievePiece(PieceBase piece)
         {
             SetPiece(piece);
-            //CheckPiece();
         }
 
-        public bool CheckPiece()
+        public bool TryMatch()
         {
             if (MatchFinder.FindMatches(this, out List<Tile> foundMatches))
             {
@@ -78,6 +77,7 @@ namespace Main.Gameplay
 
         public void PopPiece()
         {
+            if (Piece == null) return;
             Piece.Pop();
             Piece = null;
         }
@@ -93,11 +93,11 @@ namespace Main.Gameplay
             return false;
         }
 
-        public void DoFall()
+        public void DoFall(Tile targetTile)
         {
             if (Piece != null)
             {
-                Piece.FallTo(GetFallTarget());
+                Piece.FallTo(targetTile);
                 Piece = null;
             }
         }
@@ -105,16 +105,6 @@ namespace Main.Gameplay
         public bool CanSwap(DirectionType direction)
         {
             return Piece != null && GetNeighbourInDirection(direction, out var neighbour) && neighbour.Piece != null;
-        }
-
-        public Tile GetFallTarget()
-        {
-            Tile target = this;
-            while (target.GetNeighbourInDirection(DirectionType.Down, out var neighbour) && neighbour.Piece == null)
-            {
-                target = neighbour;
-            }
-            return target;
         }
     }
 }
