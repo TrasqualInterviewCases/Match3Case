@@ -1,16 +1,18 @@
-using Main.Gameplay.Command;
 using Main.Gameplay.Enums;
 using Main.Gameplay.Piece;
-using Main.Gameplay.StateMachineSystem;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Main.Gameplay
 {
     public class Tile : MonoBehaviour
     {
+        public event Action<Tile> OnMatchFound;
+        public event Action<Tile> OnNoMatchFound;
+
+        [SerializeField] bool isSpawner;
+
         public int X { get; private set; }
         public int Y { get; private set; }
 
@@ -19,8 +21,6 @@ namespace Main.Gameplay
         public PieceBase Piece { get; private set; }
 
         public Dictionary<DirectionType, Tile> Neighbours { get; private set; } = new Dictionary<DirectionType, Tile>();
-
-        public Tile fallTarget;
 
         public void Init(int x, int y, Board board)
         {
@@ -39,6 +39,24 @@ namespace Main.Gameplay
             Piece.SetOwnerTile(this);
         }
 
+        public void RecievePiece(PieceBase newPiece)
+        {
+            SetPiece(newPiece);
+            if (MatchFinder.FindMatches(this, out List<Tile> foundMatches))
+            {
+                OnMatchFound?.Invoke(this);
+                foundMatches.Add(this);
+                for (int i = 0; i < foundMatches.Count; i++)
+                {
+                    foundMatches[i].PopPiece();
+                }
+            }
+            else
+            {
+                OnNoMatchFound?.Invoke(this);
+            }
+        }
+
         public void SetupNeighbours()
         {
             Neighbours.Clear();
@@ -53,101 +71,40 @@ namespace Main.Gameplay
                 Neighbours[DirectionType.Up] = _board.Tiles[X, Y + 1];
 
             if (Y > 0 && Y <= _board.Rows - 1)
-                fallTarget = Neighbours[DirectionType.Down] = _board.Tiles[X, Y - 1];
-        }
-
-        public void RecieveInputDirection(DirectionType direction)
-        {
-            if (!Neighbours.ContainsKey(direction) || Neighbours[direction].Piece == null || Piece == null)
-            {
-                //Do Shake Animation
-                StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
-                return;
-            }
-
-            ProcessInput(direction);
-        }
-
-        private void ProcessInput(DirectionType direction)
-        {
-            var neighbour = Neighbours[direction];
-
-            var neighbourPiece = neighbour.Piece;
-            var currentPiece = Piece;
-
-            neighbour.SetPiece(currentPiece);
-            SetPiece(neighbourPiece);
-
-            var pieceSwapper = ObjectPoolManager.Instance.GetObject<SwapPieceCommand>();
-            pieceSwapper.Init(currentPiece, neighbourPiece, 5f, () =>
-            {
-                if (CheckMatchesOnSwappedTiles(neighbour, out List<Tile> combinedMatches))
-                {
-                    //process matches;
-                    for (int i = 0; i < combinedMatches.Count; i++)
-                    {
-                        combinedMatches[i].PopPiece();
-                    }
-                    var fallCommand = new FallCommand();
-                    fallCommand.Init(combinedMatches, _board);
-                    fallCommand.Execute(() =>
-                    {
-                        StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
-                    });
-                }
-                else
-                {
-                    pieceSwapper.Rewind(() =>
-                    {
-                        neighbour.SetPiece(neighbourPiece);
-                        SetPiece(currentPiece);
-                        StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
-
-                    });
-                }
-            });
+                Neighbours[DirectionType.Down] = _board.Tiles[X, Y - 1];
         }
 
         public void PopPiece()
         {
             ObjectPoolManager.Instance.ReleaseObject(Piece);
+            EmptyTile();
+        }
+
+        private void EmptyTile()
+        {
             Piece = null;
+            if (GetNeighbourInDirection(DirectionType.Up, out var neighbour))
+            {
+                if (neighbour.Piece != null)
+                    neighbour.DoFall();
+            }
         }
 
-        private bool CheckMatchesOnSwappedTiles(Tile neighbour, out List<Tile> combinedMatches)
+        public bool GetNeighbourInDirection(DirectionType direction, out Tile neighbour)
         {
-            var neighbourMatchCheck = neighbour.FindMatches(out List<Tile> neighbourMatches);
-            if (neighbourMatchCheck)
+            if (Neighbours.ContainsKey(direction))
             {
-                neighbourMatches.Add(neighbour);
+                neighbour = Neighbours[direction];
+                return true;
             }
-            else
-            {
-                neighbourMatches.Clear();
-            }
-
-            var currentMatchCheck = this.FindMatches(out List<Tile> currentMatches);
-            if (currentMatchCheck)
-            {
-                currentMatches.Add(this);
-            }
-            else
-            {
-                currentMatches.Clear();
-            }
-
-            combinedMatches = neighbourMatches.Union(currentMatches).ToList();
-
-            return neighbourMatchCheck || currentMatchCheck;
+            neighbour = null;
+            return false;
         }
 
-        public void MakePieceFall(Tile target)
+        public void DoFall()
         {
-            if (Piece != null)
-            {
-                Piece.FallTo(target);
-                Piece = null;
-            }
+            Piece.FallTo(Neighbours[DirectionType.Down]);
+            EmptyTile();
         }
     }
 }

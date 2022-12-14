@@ -101,11 +101,11 @@ namespace Main.Gameplay
 
         private static bool GetMatchingNeighbour(this Tile tile, DirectionType direction, out Tile matchingTile)
         {
-            if (tile.Neighbours.ContainsKey(direction))
+            if (tile.GetNeighbourInDirection(direction, out var neighbour))
             {
-                if (tile.Neighbours[direction].Piece != null && tile.Neighbours[direction].Piece.PieceType == tile.Piece.PieceType)
+                if (neighbour.Piece != null && neighbour.Piece.PieceType == tile.Piece.PieceType)
                 {
-                    matchingTile = tile.Neighbours[direction];
+                    matchingTile = neighbour;
                     return true;
                 }
             }

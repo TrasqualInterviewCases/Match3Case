@@ -1,3 +1,4 @@
+using Main.Gameplay.Command;
 using Main.Gameplay.Enums;
 using Main.Gameplay.StateMachineSystem;
 using UnityEngine;
@@ -44,7 +45,8 @@ namespace Main.Gameplay.TouchControls
                 if (CalculateSwipeDirection(out DirectionType direction))
                 {
                     StateMachine.Instance.ChangeState(StateMachine.Instance.AnimationState);
-                    _selectedTile.RecieveInputDirection(direction);
+                    var swap = ObjectPoolManager.Instance.GetObject<SwapPieceCommand>();
+                    swap.Init(_selectedTile, direction, 5f);
                     _selectedTile = null;
                 }
             }
