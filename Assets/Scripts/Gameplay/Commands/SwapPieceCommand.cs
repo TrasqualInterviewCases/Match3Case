@@ -20,13 +20,18 @@ namespace Main.Gameplay.Command
 
         IEnumerator movementCo;
 
-        float unmatchedTileCount;
-
         public void Init(Tile firstTile, DirectionType direction, float speed)
         {
             _firstTile = firstTile;
             if (!_firstTile.GetNeighbourInDirection(direction, out var neighbour))
             {
+                StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
+                ObjectPoolManager.Instance.ReleaseObject(this);
+                return;
+            }
+            if(neighbour.Piece == null)
+            {
+                StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
                 ObjectPoolManager.Instance.ReleaseObject(this);
                 return;
             }
@@ -36,9 +41,6 @@ namespace Main.Gameplay.Command
             _speed = speed;
             firstPiecePos = _firstPiece.transform.position;
             secondPiecePos = _secondPiece.transform.position;
-
-            _firstTile.OnNoMatchFound += CheckMatch;
-            _secondTile.OnNoMatchFound += CheckMatch;
 
             Execute();
         }
@@ -54,8 +56,6 @@ namespace Main.Gameplay.Command
             _firstPiece.transform.position = firstPieceTarget;
             _secondPiece.transform.position = secondPieceTarget;
             OnComplete();
-            ObjectPoolManager.Instance.ReleaseObject(this);
-            StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState); //For test purpose, remove later
         }
 
         public void Execute()
@@ -63,8 +63,19 @@ namespace Main.Gameplay.Command
             StopPreviousMovement();
             movementCo = MovePiecesCo(secondPiecePos, firstPiecePos, _speed, () =>
             {
-                _firstTile.RecievePiece(_secondPiece);
-                _secondTile.RecievePiece(_firstPiece);
+                _firstTile.SetPiece(_secondPiece);
+                _secondTile.SetPiece(_firstPiece);
+                var firstPieceMatched = _firstTile.CheckPiece();
+                var secondPieceMatched = _secondTile.CheckPiece();
+                if (!firstPieceMatched && !secondPieceMatched)
+                {
+                    Rewind();
+                }
+                else
+                {
+                    StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
+                    ObjectPoolManager.Instance.ReleaseObject(this);
+                }
             });
             StartCoroutine(movementCo);
         }
@@ -74,20 +85,12 @@ namespace Main.Gameplay.Command
             StopPreviousMovement();
             movementCo = MovePiecesCo(firstPiecePos, secondPiecePos, _speed, () =>
             {
-                _firstTile.RecievePiece(_firstPiece);
-                _secondTile.RecievePiece(_secondPiece);
+                _firstTile.SetPiece(_firstPiece);
+                _secondTile.SetPiece(_secondPiece);
                 StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
+                ObjectPoolManager.Instance.ReleaseObject(this);
             });
             StartCoroutine(movementCo);
-        }
-
-        private void CheckMatch(Tile tile)
-        {
-            unmatchedTileCount++;
-            if (unmatchedTileCount >= 2)
-            {
-                Rewind();
-            }
         }
 
         private void StopPreviousMovement()

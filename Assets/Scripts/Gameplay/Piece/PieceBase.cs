@@ -13,8 +13,6 @@ namespace Main.Gameplay.Piece
 
         SpriteRenderer spriteRenderer;
 
-        IEnumerator fallCo;
-
         bool isFalling;
 
         private void Awake()
@@ -55,6 +53,11 @@ namespace Main.Gameplay.Piece
             }
             transform.position = targetTile.transform.position;
             isFalling = false;
+        }
+
+        public void Pop()
+        {
+            ObjectPoolManager.Instance.ReleaseObject(this);
         }
     }
 }

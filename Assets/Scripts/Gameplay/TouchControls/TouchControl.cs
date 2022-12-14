@@ -40,6 +40,7 @@ namespace Main.Gameplay.TouchControls
             if (Input.GetMouseButton(0))
             {
                 if (_selectedTile == null) return;
+                if (_selectedTile.Piece == null) return;
 
                 endPos = Input.mousePosition;
                 if (CalculateSwipeDirection(out DirectionType direction))

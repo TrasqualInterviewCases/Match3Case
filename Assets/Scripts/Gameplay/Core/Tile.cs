@@ -8,9 +8,6 @@ namespace Main.Gameplay
 {
     public class Tile : MonoBehaviour
     {
-        public event Action<Tile> OnMatchFound;
-        public event Action<Tile> OnNoMatchFound;
-
         [SerializeField] bool isSpawner;
 
         public int X { get; private set; }
@@ -39,21 +36,29 @@ namespace Main.Gameplay
             Piece.SetOwnerTile(this);
         }
 
-        public void RecievePiece(PieceBase newPiece)
+        public bool CheckPiece()
         {
-            SetPiece(newPiece);
             if (MatchFinder.FindMatches(this, out List<Tile> foundMatches))
             {
-                OnMatchFound?.Invoke(this);
                 foundMatches.Add(this);
+                //for (int i = 0; i < foundMatches.Count; i++)
+                //{
+                //    Debug.Log(foundMatches[i].name);
+                //}
                 for (int i = 0; i < foundMatches.Count; i++)
                 {
                     foundMatches[i].PopPiece();
                 }
+                //foundMatches.Sort((tile1, tile2) => tile1.Y.CompareTo(tile2.Y));
+                //for (int i = 0; i < foundMatches.Count; i++)
+                //{
+                //    foundMatches[i].ClearTile();
+                //}
+                return true;
             }
             else
             {
-                OnNoMatchFound?.Invoke(this);
+                return false;
             }
         }
 
@@ -76,11 +81,11 @@ namespace Main.Gameplay
 
         public void PopPiece()
         {
-            ObjectPoolManager.Instance.ReleaseObject(Piece);
-            EmptyTile();
+            Piece.Pop();
+            Piece = null;
         }
 
-        private void EmptyTile()
+        public void ClearTile()
         {
             Piece = null;
             if (GetNeighbourInDirection(DirectionType.Up, out var neighbour))
@@ -105,7 +110,7 @@ namespace Main.Gameplay
             if (Piece != null)
             {
                 Piece.FallTo(Neighbours[DirectionType.Down]);
-                EmptyTile();
+                ClearTile();
             }
             else if (GetNeighbourInDirection(DirectionType.Up, out var neighbour))
             {
