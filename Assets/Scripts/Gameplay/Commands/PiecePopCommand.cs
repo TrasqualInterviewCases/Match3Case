@@ -19,7 +19,6 @@ namespace Main.Gameplay.Command
             {
                 _tiles[i].PopPiece();
             }
-            new FallCommand(_tiles);
             OnComplete();
         }
     }

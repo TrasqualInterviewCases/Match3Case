@@ -1,7 +1,6 @@
 using Main.Gameplay.Command;
 using Main.Gameplay.Enums;
 using Main.Gameplay.Piece;
-using Main.Gameplay.StateMachineSystem;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -44,6 +43,7 @@ namespace Main.Gameplay
                 foundMatches.Add(this);
 
                 new PiecePopCommand(foundMatches);
+                new FallCommand(foundMatches, _board);
 
                 return true;
             }
@@ -76,14 +76,6 @@ namespace Main.Gameplay
             Piece = null;
         }
 
-        public void RequestPiece()
-        {
-            if (GetNeighbourInDirection(DirectionType.Up, out var neighbour))
-            {
-                neighbour.DoFall();
-            }
-        }
-
         public bool GetNeighbourInDirection(DirectionType direction, out Tile neighbour)
         {
             if (Neighbours.ContainsKey(direction))
@@ -99,18 +91,24 @@ namespace Main.Gameplay
         {
             if (Piece != null)
             {
-                Piece.FallTo(Neighbours[DirectionType.Down]);
-                RequestPiece();
-            }
-            else if (GetNeighbourInDirection(DirectionType.Up, out var neighbour))
-            {
-                neighbour.DoFall();
+                Piece.FallTo(GetFallTarget());
+                Piece = null;
             }
         }
 
         public bool CanSwap(DirectionType direction)
         {
             return Piece != null && GetNeighbourInDirection(direction, out var neighbour) && neighbour.Piece != null;
+        }
+
+        public Tile GetFallTarget()
+        {
+            Tile target = this;
+            while (target.GetNeighbourInDirection(DirectionType.Down, out var neighbour) && neighbour.Piece == null)
+            {
+                target = neighbour;
+            }
+            return target;
         }
     }
 }
