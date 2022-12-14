@@ -16,17 +16,22 @@ namespace Main.Gameplay.Command
 
         public void Execute(Action OnComplete)
         {
-            Tile fallTarget;
             for (int i = 0; i < _tiles.Count; i++)
             {
-                fallTarget = _tiles[i];
-                for (int j = _tiles[i].Y + 1; j < _board.Rows; j++)
+                for (int j = 0; j < _board.Rows - 1; j++)
                 {
-                    var curTile = _board.Tiles[_tiles[i].X, j];
-                    if (curTile.Piece != null)
+                    var curEmpty = _board.Tiles[_tiles[i].X, j];
+                    if (curEmpty.Piece == null)
                     {
-                        curTile.MakePieceFall(fallTarget);
-                        fallTarget = _board.Tiles[fallTarget.X, fallTarget.Y + 1];
+                        for (int k = j + 1; k < _board.Rows; k++)
+                        {
+                            var curFull = _board.Tiles[_tiles[i].X, k];
+                            if (curFull.Piece != null)
+                            {
+                                curFull.MakePieceFall(curEmpty);
+                                break;
+                            }
+                        }
                     }
                 }
             }

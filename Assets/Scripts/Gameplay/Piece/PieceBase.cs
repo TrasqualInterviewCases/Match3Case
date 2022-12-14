@@ -15,6 +15,8 @@ namespace Main.Gameplay.Piece
 
         IEnumerator fallCo;
 
+        bool isFalling;
+
         private void Awake()
         {
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -38,11 +40,13 @@ namespace Main.Gameplay.Piece
 
         public void FallTo(Tile targetTile)
         {
+            if (isFalling) return;
             StartCoroutine(FallCo(targetTile));
         }
 
         private IEnumerator FallCo(Tile targetTile)
         {
+            isFalling = true;
             targetTile.SetPiece(this);
             while (Vector3.Distance(transform.position, targetTile.transform.position) > 0.05f)
             {
@@ -50,6 +54,7 @@ namespace Main.Gameplay.Piece
                 yield return null;
             }
             transform.position = targetTile.transform.position;
+            isFalling = false;
         }
     }
 }
