@@ -52,8 +52,8 @@ VISUAL OPTIMIZATION
 - ReAdjusted Tile Boarders to lower drawover issues.
 
 ### **ShowCase**
-https://github.com/TrasqualInterviewCases/Match3Case/blob/main/ShowCase/ShowCase.gif
+![ShowCase](https://github.com/TrasqualInterviewCases/Match3Case/blob/main/ShowCase/ShowCase.gif)
 
 
-Trello Used for Progress Tracking:
+### **Trello Used for Progress Tracking:**
 https://trello.com/invite/b/Bp5rDmV0/ATTI8c68e80c2fb3bb61fbff74b178c87a0b4600DED5/cratoonzcase
