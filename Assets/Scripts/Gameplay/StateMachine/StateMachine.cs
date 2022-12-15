@@ -16,7 +16,7 @@ namespace Main.Gameplay.StateMachineSystem
         public TouchState TouchState { get; private set; }
         public AnimationState AnimationState { get; private set; }
 
-        StateBase currentState;
+        private StateBase currentState;
 
         protected override void Awake()
         {

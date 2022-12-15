@@ -4,6 +4,7 @@ using Main.ObjectPooling;
 using System;
 using System.Collections;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 namespace Main.Gameplay.Piece
 {
@@ -11,16 +12,20 @@ namespace Main.Gameplay.Piece
     {
         [SerializeField] float fallSpeed = 5f;
 
-        PieceData _pieceData;
+        private ObjectPoolManager poolManager;
+        private PieceData _pieceData;
         public PieceType PieceType => _pieceData.pieceType;
 
-        SpriteRenderer spriteRenderer;
+        private SpriteRenderer spriteRenderer;
 
-        bool isFalling;
+        private Tile owner;
+
+        private bool isFalling;
 
         private void Awake()
         {
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            poolManager = ObjectPoolManager.Instance;
         }
 
         public void SetPosition(Vector3 position)
@@ -30,7 +35,8 @@ namespace Main.Gameplay.Piece
 
         public void SetOwnerTile(Tile tile)
         {
-            gameObject.name = GetType().Name + $"({tile.X}, {tile.Y})";
+            owner = tile;
+            gameObject.name = GetType().Name + $"({owner.X}, {owner.Y})";
         }
 
         public void Init(PieceData pieceData)
@@ -60,6 +66,7 @@ namespace Main.Gameplay.Piece
 
         public void Pop()
         {
+            _pieceData.poppingStrategy.DoOnPop(owner);
             StartCoroutine(PlayAnimation());
         }
 
@@ -73,7 +80,7 @@ namespace Main.Gameplay.Piece
                 yield return null;
             }
             transform.localScale = Vector3.one;
-            ObjectPoolManager.Instance.ReleaseObject(this);
+            poolManager.ReleaseObject(this);
         }
     }
 }

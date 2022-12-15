@@ -11,18 +11,20 @@ namespace Main.Gameplay.TouchControls
     {
         [SerializeField] float minSwipeDistance = 10;
 
-        PieceSwapper pieceSwapper;
-        Camera cam;
+        private StateMachine stateMachine;
+        private PieceSwapper pieceSwapper;
+        private Camera cam;
 
         private Vector2 startPos;
         private Vector2 endPos;
 
-        Tile _selectedTile;
+        private Tile _selectedTile;
 
         private void Awake()
         {
-            cam = Camera.main;
+            stateMachine = StateMachine.Instance;
             pieceSwapper = GetComponent<PieceSwapper>();
+            cam = Camera.main;
         }
 
         private void Update()
@@ -52,7 +54,7 @@ namespace Main.Gameplay.TouchControls
                     if (_selectedTile.CanSwap(direction))
                     {
                         pieceSwapper.Init(_selectedTile, direction);
-                        StateMachine.Instance.ChangeState(StateMachine.Instance.AnimationState);
+                        stateMachine.ChangeState(stateMachine.AnimationState);
                     }
                     _selectedTile = null;
                 }

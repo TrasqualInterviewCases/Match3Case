@@ -14,19 +14,26 @@ namespace Main.Gameplay.Core
         public int X { get; private set; }
         public int Y { get; private set; }
 
-        Board _board;
-        PieceSpawner spawner;
-        bool spawnInProgress;
+        public Board Board { get; private set; }
+        private PieceSpawner spawner;
+        private StateMachine stateMachine;
+
+        private bool spawnInProgress;
 
         public PieceBase Piece { get; private set; }
 
         public Dictionary<DirectionType, Tile> Neighbours { get; private set; } = new Dictionary<DirectionType, Tile>();
 
+        private void Awake()
+        {
+            stateMachine = StateMachine.Instance;
+        }
+
         public void Init(int x, int y, Board board)
         {
             X = x;
             Y = y;
-            _board = board;
+            Board = board;
 
             transform.localPosition = new Vector3(X, Y, 0f);
             gameObject.name = $"({X},{Y})";
@@ -56,7 +63,7 @@ namespace Main.Gameplay.Core
             {
                 if (TryMatch())
                 {
-                    StateMachine.Instance.ChangeState(StateMachine.Instance.AnimationState);
+                    stateMachine.ChangeState(stateMachine.AnimationState);
                 }
             }
         }
@@ -82,17 +89,17 @@ namespace Main.Gameplay.Core
         {
             Neighbours.Clear();
 
-            if (X >= 0 && X < _board.Columns - 1)
-                Neighbours[DirectionType.Right] = _board.Tiles[X + 1, Y];
+            if (X >= 0 && X < Board.Columns - 1)
+                Neighbours[DirectionType.Right] = Board.Tiles[X + 1, Y];
 
-            if (X > 0 && X <= _board.Columns - 1)
-                Neighbours[DirectionType.Left] = _board.Tiles[X - 1, Y];
+            if (X > 0 && X <= Board.Columns - 1)
+                Neighbours[DirectionType.Left] = Board.Tiles[X - 1, Y];
 
-            if (Y >= 0 && Y < _board.Rows - 1)
-                Neighbours[DirectionType.Up] = _board.Tiles[X, Y + 1];
+            if (Y >= 0 && Y < Board.Rows - 1)
+                Neighbours[DirectionType.Up] = Board.Tiles[X, Y + 1];
 
-            if (Y > 0 && Y <= _board.Rows - 1)
-                Neighbours[DirectionType.Down] = _board.Tiles[X, Y - 1];
+            if (Y > 0 && Y <= Board.Rows - 1)
+                Neighbours[DirectionType.Down] = Board.Tiles[X, Y - 1];
         }
 
         public void PopPiece()

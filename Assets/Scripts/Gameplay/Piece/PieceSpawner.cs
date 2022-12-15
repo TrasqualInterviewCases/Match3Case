@@ -4,7 +4,14 @@ using UnityEngine;
 
 public class PieceSpawner : MonoBehaviour
 {
-    Tile _owner;
+    private PieceProvider pieceProvider;
+
+    private Tile _owner;
+
+    private void Awake()
+    {
+        pieceProvider = PieceProvider.Instance;
+    }
 
     public void Init(Tile owner)
     {
@@ -13,7 +20,7 @@ public class PieceSpawner : MonoBehaviour
 
     public void SpawnPiece()
     {
-        var newPiece = PieceProvider.Instance.GetRandomPiece();
+        var newPiece = pieceProvider.GetRandomPiece();
         newPiece.transform.position = _owner.transform.position + new Vector3(0f, 2f, 0f);
         newPiece.FallTo(_owner);
     }

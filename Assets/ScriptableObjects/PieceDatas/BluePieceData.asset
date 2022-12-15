@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieceVisual: {fileID: 21300000, guid: 0b05d09344bf86e488eb63693f41cbd0, type: 3}
   pieceType: 2
+  poppingStrategy: {fileID: 11400000, guid: a32b2dd819901ed4b89787dfd513ac76, type: 2}

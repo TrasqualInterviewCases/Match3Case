@@ -11,9 +11,17 @@ namespace Main.Gameplay.Piece
     {
         [SerializeField] List<PieceData> pieceDatas = new();
 
+        private ObjectPoolManager poolManager;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            poolManager = ObjectPoolManager.Instance;
+        }
+
         public PieceBase GetRandomPiece()
         {
-            var newPiece = ObjectPoolManager.Instance.GetObject<PieceBase>();
+            var newPiece = poolManager.GetObject<PieceBase>();
             var randType = EnumUtilities.GetRandomFromEnum<PieceType>();
             newPiece.Init(GetDataByType(randType));
             return newPiece;

@@ -6,7 +6,15 @@ namespace Main.Gameplay.CommandSystem
 {
     public class CommandManager : Singleton<CommandManager>
     {
-        Queue<ICommand> activeCommands = new Queue<ICommand>();
+        private StateMachine stateMachine;
+
+        private readonly Queue<ICommand> activeCommands = new Queue<ICommand>();
+
+        protected override void Awake()
+        {
+            base.Awake();
+            stateMachine = StateMachine.Instance;
+        }
 
         public void AddCommand(ICommand command)
         {
@@ -17,7 +25,7 @@ namespace Main.Gameplay.CommandSystem
         {
             if (activeCommands.Count <= 0)
             {
-                StateMachine.Instance.ChangeState(StateMachine.Instance.TouchState);
+                stateMachine.ChangeState(stateMachine.TouchState);
                 return;
             }
             var command = activeCommands.Dequeue();
