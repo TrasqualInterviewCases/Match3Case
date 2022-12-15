@@ -4,7 +4,7 @@ This is a case study for Cratoonz Games. Includes swaping tiles with input, find
 
 Adjustable Value Examples:
 - The piece fall speed can be adjusted from the Piece prefab in Prefabs folder.
-- The yellow tile scriptable object currently holds the rowpop strategy so when the yellow tiles match, the whole row pops. It can be replaced with neighbour pop strategy which pops the neighbours.
+- The yellow piece scriptable object currently holds the rowpop strategy so when the yellow pieces match, the whole row pops. It can be replaced with neighbour pop strategy which pops the neighbours.
 - The Level Manager currently holds the Level 1 Data which has all the spawners active. It can be replaced with any other level data.
 The datas and strategies are inside the ScriptableObjects file.
 
@@ -16,7 +16,7 @@ CONTENTS
 - Tile: Holds the pieces and neighbours, handles the fall/spawn/matching systems. 
 - ObjectPoolManager: A generic object pool that can provide any monobehaviour class as long as it has the prefab for it. 
 - PieceProvider: Gets a piece from the pool and turns it into a random piece with random type with according sprite and popping behaviour. 
-- PieceBase: Handles the fall movement and popping strategy and popping animation. 
+- Piece: Handles the fall movement and popping strategy and popping animation. 
 - PieceData: Scriptable Object that holds data for piecetypes such as red, green, blue. Has the matching sprite and popping strategy. 
 - LevelManager: Holds the level data and sets the spawner pieces accordingly. 
 - LevelData: Scriptable Object that holds an array for booleans representing the top tiles of the board. 
