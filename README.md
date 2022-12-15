@@ -1,6 +1,6 @@
 # Match - 3
 
-This is a case study for Cratoonz Games. Includes swaping tiles with input, finding and popping matches, filling empty tiles by falling and spawning algorithms, example popping strategies for popping the whole row or popping the neighbours, object pooling, sort of a factory system for piece generation, a basic level layout system to set which of the top tiles should be spawners and optimization techniques for sprite rendering.
+This is a case study for Cratoonz Games. Includes swaping tiles with input, finding and popping matches, filling empty tiles by falling and spawning algorithms, example popping strategies for popping the whole row or popping the neighbours, object pooling, sort of a factory system for random piece generation, a basic level layout system to set which of the top tiles should be spawners and optimization techniques for sprite rendering.
 
 Examples:
 - The piece fall speed can be adjusted from the Piece prefab in Prefabs folder.
