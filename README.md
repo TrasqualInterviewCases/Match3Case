@@ -2,7 +2,7 @@
 
 This is a case study for Cratoonz Games. Includes swaping tiles with input, finding and popping matches, filling empty tiles by falling and spawning algorithms, example popping strategies for popping the whole row or popping the neighbours, object pooling, sort of a factory system for random piece generation, a basic level layout system to set which of the top tiles should be spawners and optimization techniques for sprite rendering.
 
-Examples:
+Adjustable Value Examples:
 - The piece fall speed can be adjusted from the Piece prefab in Prefabs folder.
 - The yellow tile scriptable object currently holds the rowpop strategy so when the yellow tiles match, the whole row pops. It can be replaced with neighbour pop strategy which pops the neighbours.
 - The Level Manager currently holds the Level 1 Data which has all the spawners active. It can be replaced with any other level data.
