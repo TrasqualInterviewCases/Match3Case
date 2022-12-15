@@ -11,8 +11,8 @@ namespace Main.Gameplay.CommandSystem
     {
         Tile _firstTile;
         Tile _secondTile;
-        PieceBase _firstPiece;
-        PieceBase _secondPiece;
+        Piece.Piece _firstPiece;
+        Piece.Piece _secondPiece;
 
         Vector3 firstPiecePos;
         Vector3 secondPiecePos;

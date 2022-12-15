@@ -1,6 +1,5 @@
 using Main.Gameplay.CommandSystem;
 using Main.Gameplay.Enums;
-using Main.Gameplay.Piece;
 using Main.Gameplay.StateMachineSystem;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,7 +19,7 @@ namespace Main.Gameplay.Core
 
         private bool spawnInProgress;
 
-        public PieceBase Piece { get; private set; }
+        public Piece.Piece Piece { get; private set; }
 
         public Dictionary<DirectionType, Tile> Neighbours { get; private set; } = new Dictionary<DirectionType, Tile>();
 
@@ -45,13 +44,13 @@ namespace Main.Gameplay.Core
             spawner.Init(this);
         }
 
-        public void SetPiece(PieceBase piece)
+        public void SetPiece(Piece.Piece piece)
         {
             Piece = piece;
             Piece.SetOwnerTile(this);
         }
 
-        public void RecievePiece(PieceBase piece)
+        public void RecievePiece(Piece.Piece piece)
         {
             spawnInProgress = false;
             SetPiece(piece);

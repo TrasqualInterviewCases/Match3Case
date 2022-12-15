@@ -19,9 +19,9 @@ namespace Main.Gameplay.Piece
             poolManager = ObjectPoolManager.Instance;
         }
 
-        public PieceBase GetRandomPiece()
+        public Piece GetRandomPiece()
         {
-            var newPiece = poolManager.GetObject<PieceBase>();
+            var newPiece = poolManager.GetObject<Piece>();
             var randType = EnumUtilities.GetRandomFromEnum<PieceType>();
             newPiece.Init(GetDataByType(randType));
             return newPiece;
