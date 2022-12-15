@@ -10,16 +10,16 @@ The datas and strategies are inside the ScriptableObjects file.
 
 CONTENTS
 
--Board: Handles the board creation by spawning Tiles and initiating them.
--BoardFillHandler: Fills the spawned tiles with no matches.
--MatchFinder: Static class to find matches at any given tile at any direction.
--Tile: Holds the pieces and neighbours, handles the fall/spawn/matching systems.
--ObjectPoolManager: A generic object pool that can provide any monobehaviour class as long as it has the prefab for it.
--PieceProvider: Gets a piece from the pool and turns it into a random piece with random type with according sprite and popping behaviour.
--PieceBase: Handles the fall movement and popping strategy and popping animation.
--PieceData: Scriptable Object that holds data for piecetypes such as red, green, blue. Has the matching sprite and popping strategy.
--LevelManager: Holds the level data and sets the spawner pieces accordingly.
--LevelData: Scriptable Object that holds an array for booleans representing the top tiles of the board.
+-Board: Handles the board creation by spawning Tiles and initiating them. 
+-BoardFillHandler: Fills the spawned tiles with no matches. 
+-MatchFinder: Static class to find matches at any given tile at any direction. 
+-Tile: Holds the pieces and neighbours, handles the fall/spawn/matching systems. 
+-ObjectPoolManager: A generic object pool that can provide any monobehaviour class as long as it has the prefab for it. 
+-PieceProvider: Gets a piece from the pool and turns it into a random piece with random type with according sprite and popping behaviour. 
+-PieceBase: Handles the fall movement and popping strategy and popping animation. 
+-PieceData: Scriptable Object that holds data for piecetypes such as red, green, blue. Has the matching sprite and popping strategy. 
+-LevelManager: Holds the level data and sets the spawner pieces accordingly. 
+-LevelData: Scriptable Object that holds an array for booleans representing the top tiles of the board. 
 
 
 PATTERNS USED
