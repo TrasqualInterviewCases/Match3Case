@@ -1,3 +1,4 @@
+using Main.Gameplay.LevelSystem;
 using UnityEngine;
 
 namespace Main.Gameplay.Core
@@ -11,6 +12,8 @@ namespace Main.Gameplay.Core
         [field: SerializeField] public int Columns { get; private set; } = 8;
         [field: SerializeField] public int Rows { get; private set; } = 8;
 
+        [Header("References")]
+        [SerializeField] LevelManager levelManager;
         BoardFillHandler boardFillHandler;
 
         public Tile[,] Tiles { get; private set; }
@@ -32,6 +35,10 @@ namespace Main.Gameplay.Core
                 {
                     Tiles[i, j] = Instantiate(tilePrefab, transform);
                     Tiles[i, j].Init(i, j, this);
+                    if (j == Columns - 1)
+                    {
+                        levelManager.AssignLevelData(Tiles[i, j]);
+                    }
                 }
             }
             SetupTileNeighbours();

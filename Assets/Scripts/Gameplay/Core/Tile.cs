@@ -29,12 +29,13 @@ namespace Main.Gameplay.Core
             _board = board;
 
             transform.localPosition = new Vector3(X, Y, 0f);
-            if (Y >= _board.Rows - 1)
-            {
-                spawner = gameObject.AddComponent<PieceSpawner>();
-                spawner.Init(this);
-            }
             gameObject.name = $"({X},{Y})";
+        }
+
+        public void SetSpawner()
+        {
+            spawner = gameObject.AddComponent<PieceSpawner>();
+            spawner.Init(this);
         }
 
         public void SetPiece(PieceBase piece)

@@ -1,4 +1,5 @@
 using Main.Gameplay.Enums;
+using Main.Gameplay.LevelSystem;
 using Main.Gameplay.Piece;
 using Main.ObjectPooling;
 using UnityEngine;
@@ -16,7 +17,6 @@ namespace Main.Gameplay.Core
                     var newPiece = PieceProvider.Instance.GetRandomPiece();
                     tiles[j, i].SetPiece(newPiece);
                     newPiece.SetPosition(tiles[j, i].transform.position);
-
                     while (CheckInitialMatch(tiles[j, i]))
                     {
                         ObjectPoolManager.Instance.ReleaseObject(newPiece);
