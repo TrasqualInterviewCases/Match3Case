@@ -25,9 +25,9 @@ CONTENTS
 PATTERNS USED
 
 - State Machine:
-There is a very simple finite state machine in place. There two states, Touch State and Animation State. Touch state toggles the player input and animation state toggles the command manager.
+There is a very simple finite state machine in place. There are two states; Touch State and Animation State. Touch state toggles the player input and animation state toggles the command manager.
 
-- Command System:
+- Command Pattern:
 The game loop is run by using command pattern. There are three commands that get added to the command managers queue and then executed in order.
    *Swap Command: The piece swap is initiated by Touch Controls when two pieces are swapped. Once the pieces are swapped the swap command check if they have matches and if not it reverses the swap.
    *PiecePop Command: After the swap command each tile checks it's neighbour by using the static MatchFinder class. If there are any matches found,  a new                   PiecePop Command is created with matching tiles loaded in it's constructor.
@@ -36,7 +36,7 @@ The game loop is run by using command pattern. There are three commands that get
 - Fall and Spawn Algorithm:
 When the tiles request a piece, they check if they have an upper neighbour and send a fall request to that neighbour. The neighbour checks if it has a piece and if so it drops the piece to the lower neighbour and requests another piece. If it doesn't have a piece it just requests a piece. The request keeps going upto the edge of the board. When it reaches this point, the edge tile checks if it has spawner and if it has, it gets a new piece from the piece provider. Once the tile is filled the tile will look for the lower neighbour and if it doesn't have a piece, it will drop the new piece and request another piece. After the lower tiles are filled, the tile will set the last piece it gets and tries to find a match.
 
-- Popping Strategy:
+- Strategy Pattern:
 The popping strategies are scriptable objects derived from the Popping Strategy abstract class. The strategy represents the behaviour of the piece when it is popped. There are three examples;
   *Regular: Doesn't do anything.
   *NeighbourPop: Pops the neighbours of the current tile(up, down, left and right).
