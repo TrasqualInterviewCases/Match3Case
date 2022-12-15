@@ -7,9 +7,11 @@ namespace Main.Gameplay.LevelSystem
     {
         [SerializeField] LevelData levelData;
 
+        public Vector2Int GetSize() => new (levelData.Columns, levelData.Rows);
+
         public void AssignLevelData(Tile tile)
         {
-            if (levelData.spawners[tile.X] == true)
+            if (levelData.Spawners[tile.X] == true)
             {
                 tile.SetSpawner();
             }

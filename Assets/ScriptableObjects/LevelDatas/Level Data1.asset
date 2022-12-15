@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26e33e1c724e93543961465f1d894511, type: 3}
   m_Name: Level Data1
   m_EditorClassIdentifier: 
-  spawners: 0101010101010101
+  <Columns>k__BackingField: 8
+  <Rows>k__BackingField: 8
+  <Spawners>k__BackingField: 0101010101010101
