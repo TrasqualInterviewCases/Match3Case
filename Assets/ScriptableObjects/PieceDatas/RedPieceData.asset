@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f2535cc2e9211646901f62fcc312beb, type: 3}
   m_Name: RedPieceData
   m_EditorClassIdentifier: 
-  pieceVisual: {fileID: 21300000, guid: 2423f28dfa7850e42ad225d13493bd9d, type: 3}
-  pieceType: 0
-  poppingStrategy: {fileID: 11400000, guid: a32b2dd819901ed4b89787dfd513ac76, type: 2}
+  <PieceVisual>k__BackingField: {fileID: 21300000, guid: 2423f28dfa7850e42ad225d13493bd9d, type: 3}
+  <PieceType>k__BackingField: 0
+  <PoppingStrategy>k__BackingField: {fileID: 11400000, guid: a32b2dd819901ed4b89787dfd513ac76, type: 2}
