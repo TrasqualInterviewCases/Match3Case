@@ -14,7 +14,7 @@ namespace Main.Gameplay.Piece
 
         private ObjectPoolManager poolManager;
         private PieceData _pieceData;
-        public PieceType PieceType => _pieceData.pieceType;
+        public PieceType PieceType => _pieceData.PieceType;
 
         private SpriteRenderer spriteRenderer;
 
@@ -42,7 +42,7 @@ namespace Main.Gameplay.Piece
         public void Init(PieceData pieceData)
         {
             _pieceData = pieceData;
-            spriteRenderer.sprite = pieceData.pieceVisual;
+            spriteRenderer.sprite = pieceData.PieceVisual;
         }
 
         public void FallTo(Tile targetTile)
@@ -66,7 +66,7 @@ namespace Main.Gameplay.Piece
 
         public void Pop()
         {
-            _pieceData.poppingStrategy.DoOnPop(owner);
+            _pieceData.PoppingStrategy.DoOnPop(owner);
             StartCoroutine(PlayAnimation());
         }
 

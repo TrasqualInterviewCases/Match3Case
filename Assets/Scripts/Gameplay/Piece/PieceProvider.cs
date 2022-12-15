@@ -29,7 +29,7 @@ namespace Main.Gameplay.Piece
 
         private PieceData GetDataByType(PieceType pieceType)
         {
-            return pieceDatas.FirstOrDefault((data) => data.pieceType == pieceType);
+            return pieceDatas.FirstOrDefault((data) => data.PieceType == pieceType);
         }
     }
 }
