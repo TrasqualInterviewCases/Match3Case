@@ -3,7 +3,7 @@ using Main.Gameplay.Core;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Main.Gameplay.Piece.Strategies
+namespace Main.Gameplay.Pieces.Strategies
 {
     [CreateAssetMenu(menuName = "Popping Strategies/RowPop")]
     public class RowPop : PoppingStrategy

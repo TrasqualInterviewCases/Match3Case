@@ -1,5 +1,5 @@
 using Main.Gameplay.Enums;
-using Main.Gameplay.Piece;
+using Main.Gameplay.Pieces;
 using Main.ObjectPooling;
 using UnityEngine;
 

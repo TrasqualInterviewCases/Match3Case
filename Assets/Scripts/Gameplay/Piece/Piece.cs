@@ -1,12 +1,10 @@
 using Main.Gameplay.Core;
 using Main.Gameplay.Enums;
 using Main.ObjectPooling;
-using System;
 using System.Collections;
 using UnityEngine;
-using static UnityEngine.UI.GridLayoutGroup;
 
-namespace Main.Gameplay.Piece
+namespace Main.Gameplay.Pieces
 {
     public class Piece : MonoBehaviour
     {

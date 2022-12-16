@@ -1,8 +1,8 @@
 using Main.Gameplay.Enums;
-using Main.Gameplay.Piece.Strategies;
+using Main.Gameplay.Pieces.Strategies;
 using UnityEngine;
 
-namespace Main.Gameplay.Piece
+namespace Main.Gameplay.Pieces
 {
     [CreateAssetMenu(menuName = "Piece Data")]
     public class PieceData : ScriptableObject

@@ -1,7 +1,7 @@
 using Main.Gameplay.Core;
 using UnityEngine;
 
-namespace Main.Gameplay.Piece.Strategies
+namespace Main.Gameplay.Pieces.Strategies
 {
     public abstract class PoppingStrategy : ScriptableObject
     {

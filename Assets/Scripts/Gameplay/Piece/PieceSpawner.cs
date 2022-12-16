@@ -1,5 +1,5 @@
 using Main.Gameplay.Core;
-using Main.Gameplay.Piece;
+using Main.Gameplay.Pieces;
 using UnityEngine;
 
 public class PieceSpawner : MonoBehaviour

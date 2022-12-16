@@ -3,7 +3,7 @@ using Main.Gameplay.Core;
 using System.Linq;
 using UnityEngine;
 
-namespace Main.Gameplay.Piece.Strategies
+namespace Main.Gameplay.Pieces.Strategies
 {
     [CreateAssetMenu(menuName = "Popping Strategies/NeighbourBomb")]
     public class NeighbourBombPoppingStrategy : PoppingStrategy

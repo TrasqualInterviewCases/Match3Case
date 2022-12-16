@@ -6,7 +6,7 @@ namespace Main.Gameplay.CommandSystem
 {
     public class PiecePopCommand : ICommand
     {
-        List<Tile> _tiles;
+        private readonly List<Tile> _tiles;
 
         public PiecePopCommand(List<Tile> tiles)
         {

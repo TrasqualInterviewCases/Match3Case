@@ -1,6 +1,6 @@
 using Main.Gameplay.Core;
 using Main.Gameplay.Enums;
-using Main.Gameplay.Piece;
+using Main.Gameplay.Pieces;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -9,15 +9,15 @@ namespace Main.Gameplay.CommandSystem
 {
     public class PieceSwapper : MonoBehaviour, ICommand
     {
-        Tile _firstTile;
-        Tile _secondTile;
-        Piece.Piece _firstPiece;
-        Piece.Piece _secondPiece;
+        private Tile _firstTile;
+        private Tile _secondTile;
+        private Piece _firstPiece;
+        private Piece _secondPiece;
 
-        Vector3 firstPiecePos;
-        Vector3 secondPiecePos;
+        private Vector3 firstPiecePos;
+        private Vector3 secondPiecePos;
 
-        IEnumerator movementCo;
+        private IEnumerator movementCo;
 
 
         public void Init(Tile firstTile, DirectionType direction)
@@ -31,7 +31,7 @@ namespace Main.Gameplay.CommandSystem
             CommandManager.Instance.AddCommand(this);
         }
 
-        IEnumerator MovePiecesCo(Vector3 firstPieceTarget, Vector3 secondPieceTarget, Action OnComplete)
+        private IEnumerator MovePiecesCo(Vector3 firstPieceTarget, Vector3 secondPieceTarget, Action OnComplete)
         {
             while (Vector3.Distance(_firstPiece.transform.position, firstPieceTarget) > 0.1f && Vector3.Distance(_secondPiece.transform.position, secondPieceTarget) > 0.1f)
             {
